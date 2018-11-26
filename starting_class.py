@@ -685,6 +685,21 @@ def six():
         result = []
         for query in query_list:
             result.append(db.get_result(query))
+        root2 = Tk()
+        root2.title("Case #1")
+        scrollbar = Scrollbar(root2, orient=VERTICAL)
+        scrollbar.pack(fill=Y, side=RIGHT)
+        listbox = Listbox(root2)
+        listbox.pack(fill=BOTH, expand=1)
+
+        listbox.config(yscrollcommand=scrollbar.set)
+        scrollbar.config(command=listbox.yview)
+        if len(result) == 0:
+            listbox.insert(END, "No matches")
+        else:
+            for row in result:
+                listbox.insert(END, row)
+        root2.mainloop()
 
     def apply():
         sel_day = get_day()
@@ -713,6 +728,22 @@ def six():
 def seven():
     query = "SELECT CID, COUNT(CID) AS count FROM ride_order GROUP BY CID ORDER BY count ASC LIMIT 0.1 * (SELECT COUNT(*) FROM car)"
     result = db.get_result(query)
+    root2 = Tk()
+    root2.title("Case #2")
+    scrollbar = Scrollbar(root2, orient=VERTICAL)
+    scrollbar.pack(fill=Y, side=RIGHT)
+    listbox = Listbox(root2)
+    listbox.pack(fill=BOTH, expand=1)
+
+    listbox.config(yscrollcommand=scrollbar.set)
+    scrollbar.config(command=listbox.yview)
+    if len(result) == 0:
+        listbox.insert(END, "No matches")
+    else:
+        for row in result:
+            listbox.insert(END, row)
+    root2.mainloop()
+
 
 def eight():
     root2 = Tk()
