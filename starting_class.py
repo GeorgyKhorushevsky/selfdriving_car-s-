@@ -165,11 +165,11 @@ canv.create_text(xm - 130, 50, text="password: admin")
 
 
 def one(bottom_frame):
-    arra = func.funct[0]()
-    root1 = Tk()
+    # arra = func.funct[0]()
+    root1 = Toplevel(root)
     root1.title("Case 1")
-    scrollbar = Scrollbar(root1, orient=VERTICAL)
-    scrollbar.pack(fill=Y, side=RIGHT)
+    # scrollbar = Scrollbar(root1, orient=VERTICAL)
+    # scrollbar.pack(fill=Y, side=RIGHT)
 
     sample_user = StringVar()
     username = Entry(root1, textvariable=sample_user)
@@ -181,11 +181,37 @@ def one(bottom_frame):
     first_letters.grid(row=0, column=2, padx=5, pady=2, sticky=W)
     sample_letters.set("AN")
 
-    def case_1(color, first_letter):
-        query = "SELECT CID FROM ride_order, customer, car WHERE car.color='{0}' AND car.license_plate LIKE '{1}%'" \
-                "AND ride_order.customer".format()
+    sample_color = StringVar()
+    color = Entry(root1, textvariable=sample_color)
+    color.grid(row=0, column=3, padx=5, pady=2, sticky=W)
+    sample_color.set("red")
+
+    def get_username():
+        return sample_user.get()
+
+    def get_letters():
+        return sample_letters.get()
+
+    def get_color():
+        return sample_color.get()
+
+    sample_user.trace('w', get_username)
+    sample_letters.trace('w', get_letters)
+    sample_color.trace('w', get_color)
+
+    def case_1(username, color, first_letter):
+        query = "SELECT car.* FROM car JOIN ride_order ON car.CID = ride_order.CID " \
+                "                      JOIN customer ON customer.username = '{0}'" \
+                "                      WHERE car.color = '{1}' AND car.license_plate LIKE '{2}%'".format(username, color, first_letter)
+        result = db.get_result(query)
+        for row in result:
+            print(str(row))
 
     def apply():
+        user = get_username()
+        letters = get_letters()
+        color = get_color()
+        case_1(user, color, letters)
         root1.destroy()
         root2 = Tk()
         root2.title("Case #2")
