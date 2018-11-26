@@ -776,7 +776,7 @@ def eight():
         for row in users:
             users_id.append(row[0])
         for id in users_id:
-            query = "SELECT {0} COUNT(*) FROM charging_order AS co, ride_order AS ro WHERE " \
+            query = "SELECT {0}, COUNT(*) FROM charging_order AS co, ride_order AS ro WHERE " \
                     "co.car_id = ro.CID AND date(ro.start_time) >= '{1}' AND date(ro.start_time) <= '{2}'" \
                     "AND ro.PID = {3} AND date(co.start_time) = date(ro.start_time)".format(id, form_date, form2_date, id)
             result = db.get_result(query)
@@ -784,7 +784,7 @@ def eight():
 
         result = db.get_result(query)
         root2 = Toplevel(root)
-        root2.title("Case #3")
+        root2.title("Case #8")
         scrollbar = Scrollbar(root2, orient=VERTICAL)
         scrollbar.pack(fill=Y, side=RIGHT)
         listbox = Listbox(root2)
