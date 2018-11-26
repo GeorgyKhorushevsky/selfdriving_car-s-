@@ -62,7 +62,7 @@ def sampling(db):
         db.insert('car', 'TYPE_ID,license_plate,color,baby_seat,charge_level,availability,check_success,price_per_km',
                   combine(
                       random.choice(type_id),
-                      'AN'.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(5)),
+                      'AN'+''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(5)),
                       'red', random.choice(baby_seat), random.choice(charge_level),
                       random.choice(availability), random.choice(check_success), prices[i]
                   ))
