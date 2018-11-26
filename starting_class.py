@@ -165,11 +165,8 @@ canv.create_text(xm - 130, 50, text="password: admin")
 
 
 def one(bottom_frame):
-    # arra = func.funct[0]()
     root1 = Toplevel(root)
     root1.title("Case 1")
-    # scrollbar = Scrollbar(root1, orient=VERTICAL)
-    # scrollbar.pack(fill=Y, side=RIGHT)
 
     sample_user = StringVar()
     username = Entry(root1, textvariable=sample_user)
@@ -201,8 +198,8 @@ def one(bottom_frame):
 
     def case_1(username, color, first_letter):
         query = "SELECT car.* FROM car JOIN ride_order ON car.CID = ride_order.CID " \
-                "                      JOIN customer ON customer.username = '{0}'" \
-                "                      WHERE car.color = '{1}' AND car.license_plate LIKE '{2}%'".format(username, color, first_letter)
+                "JOIN customer ON customer.username = '{0}' " \
+                "WHERE car.color = '{1}' AND car.license_plate LIKE '{2}%'".format(username, color, first_letter)
         result = db.get_result(query)
         root2 = Tk()
         root2.title("Case #1")
@@ -691,22 +688,8 @@ def six():
 
 
 def seven():
-    arra = func.funct[6]()
-    root1 = Tk()
-    root1.title("Case 7, list of 10% worst cars")
-    scrollbar = Scrollbar(root1, orient=VERTICAL)
-    scrollbar.pack(fill=Y, side=RIGHT)
-    listbox = Listbox(root1)
-    listbox.pack(fill=BOTH, expand=1)
-
-    listbox.config(yscrollcommand=scrollbar.set)
-    scrollbar.config(command=listbox.yview)
-
-    for i in arra:
-        listbox.insert(END, i)
-    root1.mainloop()
-    print("kek7")
-
+    query = "SELECT CID, COUNT(CID) AS count FROM ride_order GROUP BY CID ORDER BY count ASC LIMIT 0.1 * (SELECT COUNT(*) FROM car)"
+    result = db.get_result(query)
 
 def eight():
     root2 = Tk()
