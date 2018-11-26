@@ -235,7 +235,7 @@ def one(bottom_frame):
 
 
 def two(bottom_frame):
-    root2 = Tk()
+    root2 = Toplevel(root)
     root2.title("Case #2")
 
     day = StringVar()
@@ -287,14 +287,6 @@ def two(bottom_frame):
 
         listbox.config(yscrollcommand=scrollbar.set)
         scrollbar.config(command=listbox.yview)
-        column_names = db.get_table_columns('car')
-        column_labels = []
-        i = 0
-        for name in column_names:
-            label = Label(bottom_frame, text=name, width=12, wraplength=55)
-            label.grid(row=0, column=i)
-            column_labels.append(label)
-            i += 1
         form_date = datetime(year, month, day).date()
         for hour_interval in range(0, 24):
             hour_interval = datetime(year, month, day, hour_interval).strftime('%H')
@@ -438,7 +430,7 @@ def four():
 
 
 def five(bottom_frame):
-    root2 = Tk()
+    root2 = Toplevel(root)
     root2.title("Date")
 
     day = StringVar()
@@ -724,22 +716,22 @@ def eight():
 
     day2 = StringVar()
     day_list2 = list(range(1, 32))
-    days2 = ttk.Combobox(root2, textvariable=day)
-    days2['values'] = day_list
+    days2 = ttk.Combobox(root2, textvariable=day2)
+    days2['values'] = day_list2
     days2.current(1)
     days2.grid(row=1, column=1, padx=5, pady=5, ipady=2, sticky=W)
 
     month2 = StringVar()
-    months2 = ttk.Combobox(root2, textvariable=month)
+    months2 = ttk.Combobox(root2, textvariable=month2)
     month_list2 = list(range(1, 13))
-    months2['values'] = month_list
+    months2['values'] = month_list2
     months2.current(1)
     months2.grid(row=1, column=0, padx=5, pady=5, ipady=2, sticky=W)
 
     year2 = StringVar()
-    years2 = ttk.Combobox(root2, textvariable=year)
+    years2 = ttk.Combobox(root2, textvariable=year2)
     year_list2 = list(range(2015, 2020))
-    years2['values'] = year_list
+    years2['values'] = year_list2
     years2.current(1)
     years2.grid(row=1, column=2, padx=5, pady=5, ipady=2, sticky=W)
 
@@ -779,14 +771,14 @@ def eight():
     def case_8(year, month, day, year2, month2, day2):
         form_date = datetime(year, month, day).date()
         form2_date = datetime(year2, month2, day2).date()
-        users = db.get_result("SELECT PID FROM customers")
+        users = db.get_result("SELECT PID FROM customer")
         users_id = []
         for row in users:
             users_id.append(row[0])
         for id in users_id:
-            query = "SELECT PID, COUNT(*) FROM charging_order AS co, ride_order AS ro WHERE " \
-                    "co.CID = ro.CID AND date(ro.start_time) >= '{0}' AND date(ro.start_time) <= '{1}'" \
-                    "AND ro.PID = {2} AND date(co.start_time) = date(ro.start_time)".format(form_date, form2_date, id)
+            query = "SELECT {0} COUNT(*) FROM charging_order AS co, ride_order AS ro WHERE " \
+                    "co.car_id = ro.CID AND date(ro.start_time) >= '{1}' AND date(ro.start_time) <= '{2}'" \
+                    "AND ro.PID = {3} AND date(co.start_time) = date(ro.start_time)".format(id, form_date, form2_date, id)
             result = db.get_result(query)
             print(result)
 
@@ -829,7 +821,7 @@ def eight():
 
     apply_but = Button(root2, text="APPLY", background="#148", foreground="#ccc", padx="14", pady="7", font="13",
                        command=apply)
-    apply_but.grid(column=1, row=1)
+    apply_but.grid(column=1, row=2)
     root2.mainloop()
 
 
