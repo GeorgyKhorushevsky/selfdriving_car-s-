@@ -123,7 +123,7 @@ def init():
         elif selected_value == '4':
             four()
         elif selected_value == '5':
-            five()
+            five(bottom_frame)
         elif selected_value == '6':
             six()
         elif selected_value == '7':
@@ -447,41 +447,81 @@ def four():
     print("kek4")
 
 
-def five():
-    root2 = Tk()
+def five(bottom_frame):
+    root2 = Toplevel(root)
     root2.title("Date")
-    countryVar = StringVar()
-    countryCombo = ttk.Combobox(root2, textvariable=countryVar)
-    countryCombo['values'] = (
-    '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18',
-    '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31')
-    countryCombo.current(1)
-    countryCombo.grid(row=0, column=1, padx=5, pady=5, ipady=2, sticky=W)
-    countryVar1 = StringVar()
-    countryCombo1 = ttk.Combobox(root2, textvariable=countryVar1)
-    countryCombo1['values'] = (
-        '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11')
-    countryCombo1.current(1)
-    countryCombo1.grid(row=0, column=0, padx=5, pady=5, ipady=2, sticky=W)
-    countryVar2 = StringVar()
-    countryCombo2 = ttk.Combobox(root2, textvariable=countryVar2)
-    countryCombo2['values'] = (
-        '99', '00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16',
-        '17', '18', '19', '20')
-    countryCombo2.current(1)
-    countryCombo2.grid(row=0, column=2, padx=5, pady=5, ipady=2, sticky=W)
-    entry_month = Entry(root2, foreground="black", background="white", font="60")
+
+    day = StringVar()
+    day_list = list(range(1, 32))
+    days = ttk.Combobox(root2, textvariable=day)
+    days['values'] = day_list
+    days.current(1)
+    days.grid(row=0, column=1, padx=5, pady=5, ipady=2, sticky=W)
+
+    month = StringVar()
+    months = ttk.Combobox(root2, textvariable=month)
+    month_list = list(range(1, 13))
+    months['values'] = month_list
+    months.current(1)
+    months.grid(row=0, column=0, padx=5, pady=5, ipady=2, sticky=W)
+
+    year = StringVar()
+    years = ttk.Combobox(root2, textvariable=year)
+    year_list = list(range(2015, 2020))
+    years['values'] = year_list
+    years.current(1)
+    years.grid(row=0, column=2, padx=5, pady=5, ipady=2, sticky=W)
+
+    # entry_month = Entry(root2, foreground="black", background="white", font="60")
+
+    def get_day(*args):
+        selected_day = int(day.get())
+        return selected_day
+
+    def get_month(*args):
+        selected_month = int(month.get())
+        return selected_month
+
+    def get_year(*args):
+        selected_year = int(year.get())
+        return selected_year
+
+    day.trace('w', get_day)
+    month.trace('w', get_month)
+    year.trace('w', get_year)
+
+    def case_5(year, month, day):
+        column_names = db.get_table_columns('car')
+        column_labels = []
+        i = 0
+        for name in column_names:
+            label = Label(bottom_frame, text=name, width=12, wraplength=55)
+            label.grid(row=0, column=i)
+            column_labels.append(label)
+            i += 1
+        form_date = datetime(year, month, day).date()
+        query = "SELECT AVG(start_pick_up_dest), AVG(CAST((julianday(end_time) -  julianday(start_time)) * 24 * 60 AS INTEGER)) FROM ride_order WHERE date(start_time) = '{0}'".format(form_date)
+        result = db.get_result(query)
+        if result:
+            for row in result:
+                print(str(row))
 
     def apply():
-        arra = func.funct[4]([int(countryCombo1.get()), int(countryCombo.get()), int(countryCombo2.get())])
+        sel_day = get_day()
+        sel_month = get_month()
+        sel_year = get_year()
+        case_5(sel_year, sel_month, sel_day)
         root2.destroy()
         root1 = Tk()
-        root1.title("Case 5")
+        root1.title("Case #2")
+        scrollbar = Scrollbar(root1, orient=VERTICAL)
+        scrollbar.pack(fill=Y, side=RIGHT)
         listbox = Listbox(root1)
         listbox.pack(fill=BOTH, expand=1)
-        listbox.insert("Distance     Duration")
-        kek = str(arra[0]) + "           " + str(arra[1])
-        listbox.insert(END, kek)
+
+        listbox.config(yscrollcommand=scrollbar.set)
+        scrollbar.config(command=listbox.yview)
+
         root1.mainloop()
 
     apply_but = Button(root2, text="APPLY", background="#148", foreground="#ccc", padx="14", pady="7", font="13",
