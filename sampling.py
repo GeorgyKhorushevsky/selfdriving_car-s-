@@ -45,7 +45,7 @@ def sampling(db):
     charge_level = list(range(0, 101, 10))
     availability = ["charging", "on order", "repairing", "damaged", "idle"]
     check_success = [0, 1]
-    prices = [round(random.uniform(1.00, 2.00), 2) for _ in range(0, 10)]
+    prices = [round(random.uniform(1.00, 2.00), 2) for _ in range(0, 13)]
     for i in range(0, 10):
         r_type_id = random.choice(type_id)
         license_plate = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(7))
@@ -55,9 +55,17 @@ def sampling(db):
         r_avail = random.choice(availability)
         r_check = random.choice(check_success)
         r_price = prices[i]
-        db.insert('car', 'TYPE_ID,license_plate,color,baby_seat,charge_level,availability,check_success,price_per_km', combine(
-            r_type_id, license_plate, r_color, r_baby, r_charge, r_avail, r_check, r_price
-        ))
+        db.insert('car', 'TYPE_ID,license_plate,color,baby_seat,charge_level,availability,check_success,price_per_km',
+                  combine(r_type_id, license_plate, r_color, r_baby, r_charge, r_avail, r_check, r_price))
+    # for case 1
+    for i in range(10, 13):
+        db.insert('car', 'TYPE_ID,license_plate,color,baby_seat,charge_level,availability,check_success,price_per_km',
+                  combine(
+                      random.choice(type_id),
+                      'AN'.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(5)),
+                      'red', random.choice(baby_seat), random.choice(charge_level),
+                      random.choice(availability), random.choice(check_success), prices[i]
+                  ))
 
     # charging_station table
     cost_per_kw = [round(random.uniform(0.30, 1.20), 3) for _ in range(10)]
@@ -169,7 +177,7 @@ def sampling(db):
         r_city = random.choice(city)
         r_zipcode = ''.join(random.choice(string.digits) for _ in range(6))
         db.insert('customer_location', 'c_location_id,country,city,zipcode', combine(
-            i+1, r_country, r_city, r_zipcode
+            i + 1, r_country, r_city, r_zipcode
         ))
 
     # ride_order table
@@ -192,7 +200,6 @@ def sampling(db):
             r_price, r_start, r_pick, r_dest, r_end, r_start_time, r_end_time, r_total_distance, pids[i], cids[i]
         ))
 
-
     # payment table
     order_id = list(range(1, 21))
     for i in range(0, 20):
@@ -207,7 +214,7 @@ def simplest_password_hash():
         password = ''.join(random.choice(string.ascii_letters) for _ in range(8))
         salt = ''.join(random.choice(string.ascii_letters) for _ in range(5))
         salts.append(salt)
-        password_hashes.append(hash(password+salt))
+        password_hashes.append(hash(password + salt))
     return password_hashes, salts
 
 
