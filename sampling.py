@@ -85,7 +85,7 @@ def sampling(db):
     # charging_order table
     car_id = list(range(1, 11))
     charging_station_id = list(range(1, 11))
-    for i in range(0, 10):
+    for i in range(0, 500):
         r_cid = random.choice(car_id)
         r_csid = random.choice(charging_station_id)
         date1, date2 = two_random_dates()
@@ -224,7 +224,7 @@ def random_phone():
 
 
 def two_random_dates():
-    year = random.randint(2015, 2018)
+    year = 2018
     month = random.randint(1, 12)
     day = random.randint(1, 28)
     hour = random.randint(0, 23)

@@ -9,6 +9,7 @@ from tkinter import messagebox as mb, ttk
 from db_handler import *
 import db_initializer as db_init
 import sampling as db_sampling
+
 i = 0
 db = Database('db.sqlite')
 db_init.init(db)
@@ -60,7 +61,7 @@ def on_select(event, panel):
         items = list(data)
         for index, item in enumerate(items):
             for j in range(len(column_labels)):
-                Label(panel, text=item[j]).grid(row=index+1, column=j)
+                Label(panel, text=item[j]).grid(row=index + 1, column=j)
 
 
 def fill_tables():
@@ -141,7 +142,8 @@ def init():
     Label(master, text='tables\' names').pack(side=LEFT, fill=BOTH)
     Label(master, text='tables\' content').pack(fill=BOTH)
     Button(master, text='quit', command=master.quit).pack(side=RIGHT, fill=BOTH)
-    Button(master, text='Assignment 3', background="#148", foreground="#ccc", command=change_dropdown).pack(side=RIGHT, fill=BOTH,)
+    Button(master, text='Assignment 3', background="#148", foreground="#ccc", command=change_dropdown).pack(side=RIGHT,
+                                                                                                            fill=BOTH, )
 
     panels.add(left_panel)
     panels.add(right_panel, stretch="always")
@@ -211,7 +213,7 @@ def one(bottom_frame):
 
         listbox.config(yscrollcommand=scrollbar.set)
         scrollbar.config(command=listbox.yview)
-        if len(result)==0:
+        if len(result) == 0:
             listbox.insert(END, "No matches")
         else:
             for row in result:
@@ -224,14 +226,11 @@ def one(bottom_frame):
         color = get_color()
         case_1(user, color, letters)
 
-
     apply_but = Button(root1, text="APPLY", background="#148", foreground="#ccc", padx="14", pady="7", font="13",
                        command=apply)
     apply_but.grid(column=1, row=1)
 
-
     root1.after(500, root1.mainloop())
-
 
 
 def two(bottom_frame):
@@ -298,9 +297,8 @@ def two(bottom_frame):
             if result:
                 for row in result:
                     row1 = str(row)[0: str(row).find(",")].replace("(", "")
-                    listbox.insert(END,start + "-" + end + " : " + str(row1))
+                    listbox.insert(END, start + "-" + end + " : " + str(row1))
         root3.mainloop()
-
 
     def apply():
         sel_day = get_day()
@@ -308,7 +306,7 @@ def two(bottom_frame):
         sel_year = get_year()
         case_2(sel_year, sel_month, sel_day)
 
-    apply_but = Button(root2,text="APPLY", background="#148", foreground="#ccc", padx="14", pady="7", font="13",
+    apply_but = Button(root2, text="APPLY", background="#148", foreground="#ccc", padx="14", pady="7", font="13",
                        command=apply)
     apply_but.grid(column=1, row=1)
 
@@ -318,7 +316,6 @@ def two(bottom_frame):
     # of charging stations utilization. Given a date, compute how many
     # sockets were occupied each hour.
     # =================================================================
-
 
 
 def three():
@@ -376,17 +373,17 @@ def three():
         form_date = datetime(year, month, day).date()
 
         query_morning = "SELECT COUNT(DISTINCT CID) FROM ride_order WHERE date(start_time) = '{0}' AND " \
-                    "strftime('%H', start_time) >= '{1}' AND strftime('%H', start_time) < '{2}'".format(
-                    form_date, morning_start, morning_end)
+                        "strftime('%H', start_time) >= '{1}' AND strftime('%H', start_time) < '{2}'".format(
+            form_date, morning_start, morning_end)
         s1 = str(db.get_result(query_morning)[0])
         result = s1[1: s1.find(",")]
         query_afternoon = "SELECT COUNT(DISTINCT CID) FROM ride_order WHERE date(start_time) = '{0}' AND " \
-                    "strftime('%H', start_time) >= '{1}' AND strftime('%H', start_time) < '{2}'".format(
-                    form_date, afternoon_start, afternoon_end)
+                          "strftime('%H', start_time) >= '{1}' AND strftime('%H', start_time) < '{2}'".format(
+            form_date, afternoon_start, afternoon_end)
         s2 = str(db.get_result(query_afternoon)[0])
         result += "                " + s2[1: s1.find(",")]
         query_evening = "SELECT COUNT(DISTINCT CID) FROM ride_order WHERE date(start_time) = '{0}' AND " \
-                          "strftime('%H', start_time) >= '{1}' AND strftime('%H', start_time) < '{2}'".format(
+                        "strftime('%H', start_time) >= '{1}' AND strftime('%H', start_time) < '{2}'".format(
             form_date, evening_start, evening_end)
         s3 = str(db.get_result(query_evening)[0])
         result += "                " + s3[1: s3.find(",")]
@@ -404,21 +401,16 @@ def three():
         root2.mainloop()
         print(result)
 
-
     def apply():
         sel_day = get_day()
         sel_month = get_month()
         sel_year = get_year()
         case_3(sel_year, sel_month, sel_day)
 
-    apply_but = Button(root1,text="APPLY", background="#148", foreground="#ccc", padx="14", pady="7", font="13",
+    apply_but = Button(root1, text="APPLY", background="#148", foreground="#ccc", padx="14", pady="7", font="13",
                        command=apply)
     apply_but.grid(column=1, row=1)
-    print("Allo")
-    print("Myaw")
     root1.mainloop()
-    print("Allo1")
-
 
 
 def four():
@@ -426,7 +418,6 @@ def four():
     result = db.get_result(query)
 
     # если возвращает пустоту, то выводим фолс, если нет - то пишем, что есть дабленный пэймент
-
 
 
 def five(bottom_frame):
@@ -474,7 +465,8 @@ def five(bottom_frame):
 
     def case_5(year, month, day):
         form_date = datetime(year, month, day).date()
-        query = "SELECT AVG(start_pick_up_dest), AVG(CAST((julianday(end_time) -  julianday(start_time)) * 24 * 60 AS INTEGER)) FROM ride_order WHERE date(start_time) = '{0}'".format(form_date)
+        query = "SELECT AVG(start_pick_up_dest), AVG(CAST((julianday(end_time) -  julianday(start_time)) * 24 * 60 AS INTEGER)) FROM ride_order WHERE date(start_time) = '{0}'".format(
+            form_date)
         result = db.get_result(query)
         root2 = Toplevel(root)
         root2.title("Case #3")
@@ -486,10 +478,9 @@ def five(bottom_frame):
         listbox.config(yscrollcommand=scrollbar.set)
         scrollbar.config(command=listbox.yview)
 
-
         if result:
             for row in result:
-                listbox.insert(END,str(row))
+                listbox.insert(END, str(row))
         root2.mainloop()
 
     def apply():
@@ -597,13 +588,13 @@ def six():
         form_date = datetime(year, month, day).date()
 
         morning_pickup = "SELECT pick_up_location, COUNT(pick_up_location) AS count " \
-                "FROM ride_order WHERE strftime('%H', start_time) >= '{0}' " \
-                "AND strftime('%H', start_time) < '{1}' GROUP BY pick_up_location " \
-                "ORDER BY count DESC LIMIT 3".format(morning_start, morning_end)
+                         "FROM ride_order WHERE strftime('%H', start_time) >= '{0}' " \
+                         "AND strftime('%H', start_time) < '{1}' GROUP BY pick_up_location " \
+                         "ORDER BY count DESC LIMIT 3".format(morning_start, morning_end)
         morning_dest = "SELECT end_location, COUNT(end_location) AS count " \
-                "FROM ride_order WHERE strftime('%H', start_time) >= '{0}' " \
-                "AND strftime('%H', start_time) < '{1}' GROUP BY end_location " \
-                "ORDER BY count DESC LIMIT 3".format(morning_start, morning_end)
+                       "FROM ride_order WHERE strftime('%H', start_time) >= '{0}' " \
+                       "AND strftime('%H', start_time) < '{1}' GROUP BY end_location " \
+                       "ORDER BY count DESC LIMIT 3".format(morning_start, morning_end)
 
         afternoon_pickup = "SELECT pick_up_location, COUNT(pick_up_location) AS count " \
                            "FROM ride_order WHERE strftime('%H', start_time) >= '{0}' " \
@@ -678,6 +669,7 @@ def seven():
         for row in result:
             listbox.insert(END, row)
     root2.mainloop()
+
 
 def eight():
     root2 = Toplevel(root)
@@ -768,7 +760,8 @@ def eight():
         for id in users_id:
             query = "SELECT {0}, COUNT(*) FROM charging_order AS co, ride_order AS ro WHERE " \
                     "co.car_id = ro.CID AND date(ro.start_time) >= '{1}' AND date(ro.start_time) <= '{2}'" \
-                    "AND ro.PID = {3} AND date(co.start_time) = date(ro.start_time)".format(id, form_date, form2_date, id)
+                    "AND ro.PID = {3} AND date(co.start_time) = date(ro.start_time)".format(id, form_date, form2_date,
+                                                                                            id)
             result = db.get_result(query)
             print(result)
 
@@ -907,7 +900,8 @@ def nine():
             query = "SELECT part_name, SUM(rcp.amount), crh.WID AS total_amount FROM repaired_car_parts " \
                     "AS rcp JOIN car_repair_history AS crh ON rcp.repair_ticket_id = crh.repair_ticket_id " \
                     "WHERE date(crh.date_time) >= '{0}' AND date(crh.date_time) <= '{1}' AND crh.WID = '{2}' " \
-                    "GROUP BY crh.WID, rcp.part_name ORDER BY crh.WID, amount DESC LIMIT 1".format(date_from, date_until, id)
+                    "GROUP BY crh.WID, rcp.part_name ORDER BY crh.WID, amount DESC LIMIT 1".format(date_from,
+                                                                                                   date_until, id)
             result = db.get_result(query)
             for row in result:
                 print(row)
@@ -982,8 +976,10 @@ def ten():
 
     def case_10(year, month, day):
         date = datetime(year, month, day).date()
-        query1 = "SELECT car_id, MAX(charging_cost) FROM (SELECT car_id, SUM(charging_order.price) AS charging_cost FROM charging_order WHERE date(charging_order.start_time) < '{0}' GROUP BY charging_order.car_id)".format(date)
-        query2 = "SELECT CID, MAX(repair_cost) FROM (SELECT CID, SUM(car_repair_history.overall_price) AS repair_cost FROM car_repair_history WHERE date(car_repair_history.date_time) < '{0}' GROUP BY car_repair_history.CID)".format(date)
+        query1 = "SELECT car_id, MAX(charging_cost) FROM (SELECT car_id, SUM(charging_order.price) AS charging_cost FROM charging_order WHERE date(charging_order.start_time) < '{0}' GROUP BY charging_order.car_id)".format(
+            date)
+        query2 = "SELECT CID, MAX(repair_cost) FROM (SELECT CID, SUM(car_repair_history.overall_price) AS repair_cost FROM car_repair_history WHERE date(car_repair_history.date_time) < '{0}' GROUP BY car_repair_history.CID)".format(
+            date)
         res = db.get_result(query1)
         res2 = db.get_result(query2)
 
@@ -999,12 +995,12 @@ def ten():
     root2.mainloop()
 
 
-funct = [one, two, three, four,five, six, seven, eight, nine, ten]
+funct = [one, two, three, four, five, six, seven, eight, nine, ten]
 
 
 def login():
     global i
-    if i==0:
+    if i == 0:
         keker = func.user(str(entry_login.get()), str(entry_password.get()))
         i = 1
     else:
@@ -1013,8 +1009,9 @@ def login():
         root.title("Cases:")
         clean(1)
         canv.destroy()
-        buttons = [Button(text="3." + (str(i) if i == 10 else ("0" + str(i))), background="#148", foreground="#ccc", padx="14",
-                   pady="7", font="13", command=funct[i-1]) for i in range(1,11)]
+        buttons = [
+            Button(text="3." + (str(i) if i == 10 else ("0" + str(i))), background="#148", foreground="#ccc", padx="14",
+                   pady="7", font="13", command=funct[i - 1]) for i in range(1, 11)]
         init()
 
         # for i in range(len(buttons)):
@@ -1034,7 +1031,7 @@ login_but = Button(text="Log in", background="#148", foreground="#ccc", padx="14
 login_but.place(x=250, y=350)
 centralize()
 
-#temporary
+# temporary
 entry_login.insert(END, "admin")
 entry_password.insert(END, "admin")
 
