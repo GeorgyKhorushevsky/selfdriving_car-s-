@@ -89,9 +89,7 @@ def sampling(db):
         r_cid = random.choice(car_id)
         r_csid = random.choice(charging_station_id)
         date1, date2 = two_random_dates()
-        print(date1)
-        print(date2)
-        db.insert('charging_order', 'start_time,end_time,car_id,cs_id', combine(date1, date2, r_cid, r_csid))
+        db.insert('charging_order', 'start_time,end_time,car_id,cs_id,price', combine(date1, date2, r_cid, r_csid, round(random.uniform(10.0, 50.0), 2)))
 
     # provider
     name = ["Company 1", "Company 2", "Company 3", "Company 4"]
@@ -142,7 +140,7 @@ def sampling(db):
         r_date, r2_date = two_random_dates()
         r_wid = random.randint(1, 4)
         r_cid = random.randint(1, 4)
-        db.insert('car_repair_history', 'date_time,WID,CID', combine(r_date, r_wid, r_cid))
+        db.insert('car_repair_history', 'date_time,overall_price,WID,CID', combine(r_date, round(random.uniform(50.00, 500.00)), r_wid, r_cid))
 
     # repaired_car_parts
     for i in range(0, 10):

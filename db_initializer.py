@@ -57,6 +57,7 @@ def init(db):
             end_time DATETIME NOT NULL,
             car_id INTEGER NOT NULL, 
             cs_id INTEGER NOT NULL,
+            price FLOAT NOT NULL,
             FOREIGN KEY (car_id) REFERENCES car (CID),
             FOREIGN KEY (cs_id) REFERENCES charging_station (UID))
     """)
@@ -114,10 +115,12 @@ def init(db):
             PRIMARY KEY (part_name, order_date, workshop_id, company_id))
     """)
 
+    db.query("DROP TABLE IF EXISTS car_repair_history")
     db.query("""
         CREATE TABLE IF NOT EXISTS car_repair_history (
             repair_ticket_id INTEGER PRIMARY KEY AUTOINCREMENT,
             date_time DATETIME NOT NULL,
+            overall_price FLOAT NOT NULL,
             WID INTEGER NOT NULL,
             CID INTEGER NOT NULL,
             UNIQUE(CID, WID, date_time))
@@ -143,7 +146,6 @@ def init(db):
             password_salt TEXT NOT NULl)
     """)
 
-    db.query("DROP TABLE IF EXISTS customer_location")
     db.query("""
         CREATE TABLE IF NOT EXISTS customer_location (
             c_location_id INTEGER PRIMARY KEY,

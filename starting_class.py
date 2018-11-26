@@ -473,14 +473,6 @@ def five(bottom_frame):
     year.trace('w', get_year)
 
     def case_5(year, month, day):
-        column_names = db.get_table_columns('car')
-        column_labels = []
-        i = 0
-        for name in column_names:
-            label = Label(bottom_frame, text=name, width=12, wraplength=55)
-            label.grid(row=0, column=i)
-            column_labels.append(label)
-            i += 1
         form_date = datetime(year, month, day).date()
         query = "SELECT AVG(start_pick_up_dest), AVG(CAST((julianday(end_time) -  julianday(start_time)) * 24 * 60 AS INTEGER)) FROM ride_order WHERE date(start_time) = '{0}'".format(form_date)
         result = db.get_result(query)
@@ -686,8 +678,6 @@ def seven():
         for row in result:
             listbox.insert(END, row)
     root2.mainloop()
-
-
 
 def eight():
     root2 = Toplevel(root)
@@ -950,14 +940,63 @@ def nine():
 
 
 def ten():
-    arra = func.funct[9]()
-    root1 = Tk()
-    root1.title("Case 10")
-    listbox = Listbox(root1)
-    listbox.pack(fill=BOTH, expand=1)
-    listbox.insert(END, arra)
-    root1.mainloop()
-    print("kek10")
+    root2 = Toplevel(root)
+    root2.title("Date")
+
+    day = StringVar()
+    day_list = list(range(1, 32))
+    days = ttk.Combobox(root2, textvariable=day)
+    days['values'] = day_list
+    days.current(1)
+    days.grid(row=0, column=1, padx=5, pady=5, ipady=2, sticky=W)
+
+    month = StringVar()
+    months = ttk.Combobox(root2, textvariable=month)
+    month_list = list(range(1, 13))
+    months['values'] = month_list
+    months.current(1)
+    months.grid(row=0, column=0, padx=5, pady=5, ipady=2, sticky=W)
+
+    year = StringVar()
+    years = ttk.Combobox(root2, textvariable=year)
+    year_list = list(range(2015, 2020))
+    years['values'] = year_list
+    years.current(1)
+    years.grid(row=0, column=2, padx=5, pady=5, ipady=2, sticky=W)
+
+    def get_day(*args):
+        selected_day = int(day.get())
+        return selected_day
+
+    def get_month(*args):
+        selected_month = int(month.get())
+        return selected_month
+
+    def get_year(*args):
+        selected_year = int(year.get())
+        return selected_year
+
+    day.trace('w', get_day)
+    month.trace('w', get_month)
+    year.trace('w', get_year)
+
+    def case_10(year, month, day):
+        date = datetime(year, month, day).date()
+        query1 = "SELECT car_id, MAX(charging_cost) FROM (SELECT car_id, SUM(charging_order.price) AS charging_cost FROM charging_order WHERE date(charging_order.start_time) < '{0}' GROUP BY charging_order.car_id)".format(date)
+        query2 = "SELECT CID, MAX(repair_cost) FROM (SELECT CID, SUM(car_repair_history.overall_price) AS repair_cost FROM car_repair_history WHERE date(car_repair_history.date_time) < '{0}' GROUP BY car_repair_history.CID)".format(date)
+        res = db.get_result(query1)
+        res2 = db.get_result(query2)
+
+    def apply():
+        sel_day = get_day()
+        sel_month = get_month()
+        sel_year = get_year()
+        case_10(sel_year, sel_month, sel_day)
+
+    apply_but = Button(root2, text="APPLY", background="#148", foreground="#ccc", padx="14", pady="7", font="13",
+                       command=apply)
+    apply_but.grid(column=1, row=2)
+    root2.mainloop()
 
 
 funct = [one, two, three, four,five, six, seven, eight, nine, ten]
