@@ -531,17 +531,151 @@ def five(bottom_frame):
 
 
 def six():
-    arra = func.funct[5]()
-    root1 = Tk()
-    root1.title("Case 6")
-    listbox = Listbox(root1)
-    listbox.pack(fill=BOTH, expand=1)
-    listbox.insert("Morning     Afternoon     Evening")
-    kek = str(arra[0][0]) + "           " + str(arra[0][1]) + "            " + str(arra[0][2])
-    listbox.insert(END, kek)
-    kek = str(arra[1][0]) + " " + str(arra[1][1]) + " " + str(arra[1][2])
-    listbox.insert(END, kek)
-    root1.mainloop()
+    root2 = Toplevel(root)
+    root2.title("Date")
+
+    day = StringVar()
+    day_list = list(range(1, 32))
+    days = ttk.Combobox(root2, textvariable=day)
+    days['values'] = day_list
+    days.current(1)
+    days.grid(row=0, column=1, padx=5, pady=5, ipady=2, sticky=W)
+
+    month = StringVar()
+    months = ttk.Combobox(root2, textvariable=month)
+    month_list = list(range(1, 13))
+    months['values'] = month_list
+    months.current(1)
+    months.grid(row=0, column=0, padx=5, pady=5, ipady=2, sticky=W)
+
+    year = StringVar()
+    years = ttk.Combobox(root2, textvariable=year)
+    year_list = list(range(2015, 2020))
+    years['values'] = year_list
+    years.current(1)
+    years.grid(row=0, column=2, padx=5, pady=5, ipady=2, sticky=W)
+
+    day2 = StringVar()
+    day_list2 = list(range(1, 32))
+    days2 = ttk.Combobox(root2, textvariable=day)
+    days2['values'] = day_list
+    days2.current(1)
+    days2.grid(row=1, column=1, padx=5, pady=5, ipady=2, sticky=W)
+
+    month2 = StringVar()
+    months2 = ttk.Combobox(root2, textvariable=month)
+    month_list2 = list(range(1, 13))
+    months2['values'] = month_list
+    months2.current(1)
+    months2.grid(row=1, column=0, padx=5, pady=5, ipady=2, sticky=W)
+
+    year2 = StringVar()
+    years2 = ttk.Combobox(root2, textvariable=year)
+    year_list2 = list(range(2015, 2020))
+    years2['values'] = year_list
+    years2.current(1)
+    years2.grid(row=1, column=2, padx=5, pady=5, ipady=2, sticky=W)
+
+    # entry_month = Entry(root2, foreground="black", background="white", font="60")
+
+    def get_day(*args):
+        selected_day = int(day.get())
+        return selected_day
+
+    def get_month(*args):
+        selected_month = int(month.get())
+        return selected_month
+
+    def get_year(*args):
+        selected_year = int(year.get())
+        return selected_year
+
+    def get_day2(*args):
+        selected_day = int(day2.get())
+        return selected_day
+
+    def get_month2(*args):
+        selected_month = int(month2.get())
+        return selected_month
+
+    def get_year2(*args):
+        selected_year = int(year2.get())
+        return selected_year
+
+    day.trace('w', get_day)
+    month.trace('w', get_month)
+    year.trace('w', get_year)
+    day2.trace('w', get_day2)
+    month2.trace('w', get_month2)
+    year2.trace('w', get_year2)
+
+    def case_5(year, month, day):
+        # for morning (7 AM - 10 AM)
+        morning_start = datetime(year, month, day, 7, 00).strftime('%H')
+        morning_end = datetime(year, month, day, 10, 00).strftime('%H')
+        # for afternoon (12 AM - 2 PM)
+        afternoon_start = datetime(year, month, day, 12, 00).strftime('%H')
+        afternoon_end = datetime(year, month, day, 14, 00).strftime('%H')
+        # for evening (5 PM - 7 PM)
+        evening_start = datetime(year, month, day, 17, 00).strftime('%H')
+        evening_end = datetime(year, month, day, 19, 00).strftime('%H')
+
+        form_date = datetime(year, month, day).date()
+
+        morning_pickup = "SELECT pick_up_location, COUNT(pick_up_location) AS count " \
+                "FROM ride_order WHERE strftime('%H', start_time) >= '{0}' " \
+                "AND strftime('%H', start_time) < '{1}' GROUP BY pick_up_location " \
+                "ORDER BY count DESC LIMIT 3".format(morning_start, morning_end)
+        morning_dest = "SELECT end_location, COUNT(end_location) AS count " \
+                "FROM ride_order WHERE strftime('%H', start_time) >= '{0}' " \
+                "AND strftime('%H', start_time) < '{1}' GROUP BY end_location " \
+                "ORDER BY count DESC LIMIT 3".format(morning_start, morning_end)
+
+        afternoon_pickup = "SELECT pick_up_location, COUNT(pick_up_location) AS count " \
+                           "FROM ride_order WHERE strftime('%H', start_time) >= '{0}' " \
+                           "AND strftime('%H', start_time) < '{1}'GROUP BY pick_up_location " \
+                           "ORDER BY count DESC LIMIT 3".format(morning_start, morning_end)
+        afternoon_dest = "SELECT pick_up_location, COUNT(pick_up_location) AS count " \
+                         "FROM ride_order WHERE strftime('%H', start_time) >= '{0}' " \
+                         "AND strftime('%H', start_time) < '{1}'GROUP BY pick_up_location " \
+                         "ORDER BY count DESC LIMIT 3".format(morning_start, morning_end)
+
+        evening_pickup = "SELECT pick_up_location, COUNT(pick_up_location) AS count " \
+                         "FROM ride_order WHERE strftime('%H', start_time) >= '{0}' " \
+                         "AND strftime('%H', start_time) < '{1}'GROUP BY pick_up_location " \
+                         "ORDER BY count DESC LIMIT 3".format(morning_start, morning_end)
+        evening_dest = "SELECT pick_up_location, COUNT(pick_up_location) AS count " \
+                       "FROM ride_order WHERE strftime('%H', start_time) >= '{0}' " \
+                       "AND strftime('%H', start_time) < '{1}'GROUP BY pick_up_location " \
+                       "ORDER BY count DESC LIMIT 3".format(morning_start, morning_end)
+
+        # result = db.get_result(query)
+        if result:
+            for row in result:
+                print(str(row))
+
+    def apply():
+        sel_day = get_day()
+        sel_month = get_month()
+        sel_year = get_year()
+        case_5(sel_year, sel_month, sel_day)
+        root2.destroy()
+        root1 = Tk()
+        root1.title("Case #2")
+        scrollbar = Scrollbar(root1, orient=VERTICAL)
+        scrollbar.pack(fill=Y, side=RIGHT)
+        listbox = Listbox(root1)
+        listbox.pack(fill=BOTH, expand=1)
+
+        listbox.config(yscrollcommand=scrollbar.set)
+        scrollbar.config(command=listbox.yview)
+
+        root1.mainloop()
+
+    apply_but = Button(root2, text="APPLY", background="#148", foreground="#ccc", padx="14", pady="7", font="13",
+                       command=apply)
+    apply_but.grid(column=1, row=1)
+    root2.mainloop()
 
 
 def seven():
