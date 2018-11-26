@@ -204,8 +204,20 @@ def one(bottom_frame):
                 "                      JOIN customer ON customer.username = '{0}'" \
                 "                      WHERE car.color = '{1}' AND car.license_plate LIKE '{2}%'".format(username, color, first_letter)
         result = db.get_result(query)
+        root2 = Tk()
+        root2.title("Case #1")
+        scrollbar = Scrollbar(root2, orient=VERTICAL)
+        scrollbar.pack(fill=Y, side=RIGHT)
+        listbox = Listbox(root2)
+        listbox.pack(fill=BOTH, expand=1)
+
+        listbox.config(yscrollcommand=scrollbar.set)
+        scrollbar.config(command=listbox.yview)
+
+        listbox.insert(END, "Ti pidor")
         for row in result:
-            print(str(row))
+            listbox.insert(END, row)
+        root2.mainloop()
 
     def apply():
         user = get_username()
@@ -233,11 +245,11 @@ def one(bottom_frame):
     listbox = Listbox(root1)
     # listbox.pack(fill=BOTH, expand=1)
 
-    listbox.config(yscrollcommand=scrollbar.set)
-    scrollbar.config(command=listbox.yview)
-
-    for i in arra:
-        listbox.insert(END,i)
+    # listbox.config(yscrollcommand=scrollbar.set)
+    # scrollbar.config(command=listbox.yview)
+    #
+    # for i in arra:
+    #     listbox.insert(END,i)
     root1.mainloop()
     column_names = db.get_table_columns('car')
     column_labels = []
@@ -624,8 +636,7 @@ funct = [one, two, three, four,five, six, seven, eight, nine, ten]
 
 
 def login():
-
-    keker = func.user(str(entry_login), str(entry_password))
+    keker = func.user(str(entry_login.get()), str(entry_password.get()))
     if (keker):
         root.title("Cases:")
         clean(1)
