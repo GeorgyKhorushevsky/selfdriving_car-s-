@@ -413,9 +413,22 @@ def three():
 
 
 def four():
-    query = "SELECT date_time, PID, order_id, username, COUNT(*) FROM payment JOIN customer ON customer,PID = payment.PID GROUP BY date_time, PID, order_id HAVING COUNT(*) > 1"
+    query = "SELECT date_time, PID, order_id, username, COUNT(*) FROM payment JOIN customer ON customer.PID = payment.PID GROUP BY date_time, PID, order_id HAVING COUNT(*) > 1"
     result = db.get_result(query)
+    root2 = Toplevel(root)
+    root2.title("Case #1")
+    scrollbar = Scrollbar(root2, orient=VERTICAL)
+    scrollbar.pack(fill=Y, side=RIGHT)
+    listbox = Listbox(root2)
+    listbox.pack(fill=BOTH, expand=1)
 
+    listbox.config(yscrollcommand=scrollbar.set)
+    scrollbar.config(command=listbox.yview)
+    if len(result) == 0:
+        listbox.insert(END, "No matches")
+    else:
+        listbox.insert(END, result)
+    root2.mainloop()
     # если возвращает пустоту, то выводим фолс, если нет - то пишем, что есть дабленный пэймент
 
 
@@ -756,16 +769,26 @@ def eight():
         users_id = []
         for row in users:
             users_id.append(row[0])
+        root2 = Toplevel(root)
+        root2.title("Case #3")
+        scrollbar = Scrollbar(root2, orient=VERTICAL)
+        scrollbar.pack(fill=Y, side=RIGHT)
+        listbox = Listbox(root2)
+        listbox.pack(fill=BOTH, expand=2)
+
+        listbox.config(yscrollcommand=scrollbar.set)
+        scrollbar.config(command=listbox.yview)
+
         for id in users_id:
             query = "SELECT {0}, COUNT(*) FROM charging_order AS co, ride_order AS ro WHERE " \
                     "co.car_id = ro.CID AND date(ro.start_time) >= '{1}' AND date(ro.start_time) <= '{2}'" \
-                    "AND ro.PID = {3} AND date(co.start_time) = date(ro.start_time)".format(id, form_date, form2_date,
-                                                                                            id)
+                    "AND ro.PID = {3} AND date(co.start_time) = date(ro.start_time)".format(id, form_date, form2_date, id)
             result = db.get_result(query)
+            listbox.insert(END, result)
             print(result)
-
+        root2.mainloop()
         result = db.get_result(query)
-        root2 = Toplevel(root)
+        root2 = Tk()
         root2.title("Case #8")
         scrollbar = Scrollbar(root2, orient=VERTICAL)
         scrollbar.pack(fill=Y, side=RIGHT)
