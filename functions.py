@@ -2,7 +2,9 @@
 
 
 def User(self, login, password):
-    return True
+    if (login=="admin" and password=="admin"):
+        return True
+    return False
 # Lenur, instead of [] return me array of rows with all shit i need
 def one():
     return []
