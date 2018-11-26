@@ -114,7 +114,6 @@ def init():
 
     # if selected value changed
     def change_dropdown(*args):
-        print("ya pidor")
         selected_value = var.get()
         if selected_value == '1':
             one(bottom_frame)
