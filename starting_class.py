@@ -239,28 +239,7 @@ def one(bottom_frame):
                        command=apply)
     apply_but.grid(column=1, row=1)
     root1.mainloop()
-    listbox = Listbox(root1)
-    # listbox.pack(fill=BOTH, expand=1)
 
-    # listbox.config(yscrollcommand=scrollbar.set)
-    # scrollbar.config(command=listbox.yview)
-    #
-    # for i in arra:
-    #     listbox.insert(END,i)
-    root1.mainloop()
-    column_names = db.get_table_columns('car')
-    column_labels = []
-    i = 0
-    for name in column_names:
-        label = Label(bottom_frame, text=name, width=12, wraplength=55)
-        label.grid(row=0, column=i)
-        column_labels.append(label)
-        i += 1
-    result = db.get_result(query)
-    items = list(result)
-    for index, item in enumerate(items):
-        for j in range(len(column_labels)):
-            Label(bottom_frame, text=item[j]).grid(row=index + 1, column=j)
 
 
 def two(bottom_frame):
