@@ -210,10 +210,11 @@ def one(bottom_frame):
 
         listbox.config(yscrollcommand=scrollbar.set)
         scrollbar.config(command=listbox.yview)
-
-        listbox.insert(END, "Ti pidor")
-        for row in result:
-            listbox.insert(END, row)
+        if len(result)==0:
+            listbox.insert(END, "No matches")
+        else:
+            for row in result:
+                listbox.insert(END, row)
         root2.mainloop()
 
     def apply():
@@ -286,6 +287,15 @@ def two(bottom_frame):
     year.trace('w', get_year)
 
     def case_2(year, month, day):
+        root3 = Tk()
+        root3.title("Case #2")
+        scrollbar = Scrollbar(root3, orient=VERTICAL)
+        scrollbar.pack(fill=Y, side=RIGHT)
+        listbox = Listbox(root3)
+        listbox.pack(fill=BOTH, expand=1)
+
+        listbox.config(yscrollcommand=scrollbar.set)
+        scrollbar.config(command=listbox.yview)
         column_names = db.get_table_columns('car')
         column_labels = []
         i = 0
@@ -304,7 +314,9 @@ def two(bottom_frame):
             result = db.get_result(query)
             if result:
                 for row in result:
-                    print(start + "-" + end + " : " + str(row))
+                    listbox.insert(END,start + "-" + end + " : " + str(row))
+        root3.mainloop()
+
 
     def apply():
         sel_day = get_day()
@@ -380,7 +392,6 @@ def three():
     def case_3(year, month, day):
         # for morning (7 AM - 10 AM)
         morning_start = datetime(year, month, day, 7, 00).strftime('%H')
-        print(morning_start)
         morning_end = datetime(year, month, day, 10, 00).strftime('%H')
         # for afternoon (12 AM - 2 PM)
         afternoon_start = datetime(year, month, day, 12, 00).strftime('%H')
@@ -394,15 +405,31 @@ def three():
         query_morning = "SELECT COUNT(DISTINCT CID) FROM ride_order WHERE date(start_time) = '{0}' AND " \
                     "strftime('%H', start_time) >= '{1}' AND strftime('%H', start_time) < '{2}'".format(
                     form_date, morning_start, morning_end)
-        result = str(db.get_result(query_morning)[0])
+        s1 = str(db.get_result(query_morning)[0])
+        print(s1)
+        result = s1[1: s1.find(",")]
         query_afternoon = "SELECT COUNT(DISTINCT CID) FROM ride_order WHERE date(start_time) = '{0}' AND " \
                     "strftime('%H', start_time) >= '{1}' AND strftime('%H', start_time) < '{2}'".format(
                     form_date, afternoon_start, afternoon_end)
-        result += " " + str(db.get_result(query_afternoon)[0])
+        s2 = str(db.get_result(query_afternoon)[0])
+        result += "                " + s2[1: s1.find(",")]
         query_evening = "SELECT COUNT(DISTINCT CID) FROM ride_order WHERE date(start_time) = '{0}' AND " \
                           "strftime('%H', start_time) >= '{1}' AND strftime('%H', start_time) < '{2}'".format(
             form_date, evening_start, evening_end)
-        result += " " + str(db.get_result(query_evening)[0])
+        s3 = str(db.get_result(query_evening)[0])
+        result += "                " + s3[1: s3.find(",")]
+        root2 = Toplevel(root)
+        root2.title("Case #3")
+        scrollbar = Scrollbar(root2, orient=VERTICAL)
+        scrollbar.pack(fill=Y, side=RIGHT)
+        listbox = Listbox(root2)
+        listbox.pack(fill=BOTH, expand=2)
+
+        listbox.config(yscrollcommand=scrollbar.set)
+        scrollbar.config(command=listbox.yview)
+        listbox.insert(END, "Morning Afternoon Evening")
+        listbox.insert(END, result)
+        root2.mainloop()
         print(result)
 
 
@@ -490,9 +517,21 @@ def five(bottom_frame):
         form_date = datetime(year, month, day).date()
         query = "SELECT AVG(start_pick_up_dest), AVG(CAST((julianday(end_time) -  julianday(start_time)) * 24 * 60 AS INTEGER)) FROM ride_order WHERE date(start_time) = '{0}'".format(form_date)
         result = db.get_result(query)
+        root2 = Toplevel(root)
+        root2.title("Case #3")
+        scrollbar = Scrollbar(root2, orient=VERTICAL)
+        scrollbar.pack(fill=Y, side=RIGHT)
+        listbox = Listbox(root2)
+        listbox.pack(fill=BOTH, expand=2)
+
+        listbox.config(yscrollcommand=scrollbar.set)
+        scrollbar.config(command=listbox.yview)
+
+
         if result:
             for row in result:
-                print(str(row))
+                listbox.insert(END,str(row))
+        root2.mainloop()
 
     def apply():
         sel_day = get_day()
