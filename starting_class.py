@@ -789,7 +789,126 @@ def eight():
     root2.mainloop()
 
 def nine():
-    query = ""
+    root2 = Toplevel(root)
+    root2.title("Date")
+
+    day = StringVar()
+    day_list = list(range(1, 32))
+    days = ttk.Combobox(root2, textvariable=day)
+    days['values'] = day_list
+    days.current(1)
+    days.grid(row=0, column=1, padx=5, pady=5, ipady=2, sticky=W)
+
+    month = StringVar()
+    months = ttk.Combobox(root2, textvariable=month)
+    month_list = list(range(1, 13))
+    months['values'] = month_list
+    months.current(1)
+    months.grid(row=0, column=0, padx=5, pady=5, ipady=2, sticky=W)
+
+    year = StringVar()
+    years = ttk.Combobox(root2, textvariable=year)
+    year_list = list(range(2015, 2020))
+    years['values'] = year_list
+    years.current(1)
+    years.grid(row=0, column=2, padx=5, pady=5, ipady=2, sticky=W)
+
+    day2 = StringVar()
+    day_list2 = list(range(1, 32))
+    days2 = ttk.Combobox(root2, textvariable=day2)
+    days2['values'] = day_list2
+    days2.current(1)
+    days2.grid(row=1, column=1, padx=5, pady=5, ipady=2, sticky=W)
+
+    month2 = StringVar()
+    months2 = ttk.Combobox(root2, textvariable=month2)
+    month_list2 = list(range(1, 13))
+    months2['values'] = month_list2
+    months2.current(1)
+    months2.grid(row=1, column=0, padx=5, pady=5, ipady=2, sticky=W)
+
+    year2 = StringVar()
+    years2 = ttk.Combobox(root2, textvariable=year2)
+    year_list2 = list(range(2015, 2020))
+    years2['values'] = year_list2
+    years2.current(1)
+    years2.grid(row=1, column=2, padx=5, pady=5, ipady=2, sticky=W)
+
+    # entry_month = Entry(root2, foreground="black", background="white", font="60")
+
+    def get_day(*args):
+        selected_day = int(day.get())
+        return selected_day
+
+    def get_month(*args):
+        selected_month = int(month.get())
+        return selected_month
+
+    def get_year(*args):
+        selected_year = int(year.get())
+        return selected_year
+
+    def get_day2(*args):
+        selected_day = int(day2.get())
+        return selected_day
+
+    def get_month2(*args):
+        selected_month = int(month2.get())
+        return selected_month
+
+    def get_year2(*args):
+        selected_year = int(year2.get())
+        return selected_year
+
+    day.trace('w', get_day)
+    month.trace('w', get_month)
+    year.trace('w', get_year)
+    day2.trace('w', get_day2)
+    month2.trace('w', get_month2)
+    year2.trace('w', get_year2)
+
+    def case_8(year, month, day, year2, month2, day2):
+        date_from = datetime(year, month, day)
+        date_until = datetime(year2, month2, day2)
+        query = "SELECT WID FROM workshop"
+        temp = db.get_result(query)
+        workshop_id = []
+        for id in temp:
+            workshop_id.append(id[0])
+        # dictin = {}
+        for id in workshop_id:
+            query = "SELECT part_name, SUM(rcp.amount), crh.WID AS total_amount FROM repaired_car_parts " \
+                    "AS rcp JOIN car_repair_history AS crh ON rcp.repair_ticket_id = crh.repair_ticket_id " \
+                    "WHERE date(crh.date_time) >= '{0}' AND date(crh.date_time) <= '{1}' AND crh.WID = '{2}' " \
+                    "GROUP BY crh.WID, rcp.part_name ORDER BY crh.WID, amount DESC".format(date_from, date_until, id)
+            result = db.get_result(query)
+            for row in result:
+                print(row)
+    def apply():
+        sel_day = get_day()
+        sel_month = get_month()
+        sel_year = get_year()
+        sel_day2 = get_day2()
+        sel_month2 = get_month2()
+        sel_year2 = get_year2()
+        case_8(sel_year, sel_month, sel_day, sel_year2, sel_month2, sel_day2)
+        root2.destroy()
+        root1 = Tk()
+        root1.title("Case #2")
+        scrollbar = Scrollbar(root1, orient=VERTICAL)
+        scrollbar.pack(fill=Y, side=RIGHT)
+        listbox = Listbox(root1)
+        listbox.pack(fill=BOTH, expand=1)
+
+        listbox.config(yscrollcommand=scrollbar.set)
+        scrollbar.config(command=listbox.yview)
+
+        root1.mainloop()
+
+    apply_but = Button(root2, text="APPLY", background="#148", foreground="#ccc", padx="14", pady="7", font="13",
+                       command=apply)
+    apply_but.grid(column=1, row=2)
+    root2.mainloop()
 
 
 def ten():
