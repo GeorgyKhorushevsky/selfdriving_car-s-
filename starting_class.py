@@ -9,7 +9,7 @@ from tkinter import messagebox as mb, ttk
 from db_handler import *
 import db_initializer as db_init
 import sampling as db_sampling
-
+i = 0
 db = Database('db.sqlite')
 db_init.init(db)
 db_sampling.sampling(db)
@@ -25,7 +25,7 @@ label_login = Label(root, text="Login:", background="white", font="60")
 label_password = Label(root, text="Password:", background="white", font="60")
 entry_login = Entry(root, foreground="black", background="white", font="60")
 entry_password = Entry(root, show="*", foreground="black", background="white", font="60")
-
+a, b = "admin", "admin"
 day = [str(i) for i in range(1, 32)]
 month = [str(i) for i in range(1, 13)]
 year = [str(i) for i in range(1999, 2019)]
@@ -113,6 +113,7 @@ def init():
 
     # if selected value changed
     def change_dropdown(*args):
+        print("ya pidor")
         selected_value = var.get()
         if selected_value == '1':
             one(bottom_frame)
@@ -140,7 +141,7 @@ def init():
     Label(master, text='tables\' names').pack(side=LEFT, fill=BOTH)
     Label(master, text='tables\' content').pack(fill=BOTH)
     Button(master, text='quit', command=master.quit).pack(side=RIGHT, fill=BOTH)
-    Button(master, text='Assignment 3', background="#148", foreground="#ccc").pack(side=RIGHT, fill=BOTH)
+    Button(master, text='Assignment 3', background="#148", foreground="#ccc", command=change_dropdown).pack(side=RIGHT, fill=BOTH,)
 
     panels.add(left_panel)
     panels.add(right_panel, stretch="always")
@@ -165,7 +166,7 @@ canv.create_text(xm - 130, 50, text="password: admin")
 
 
 def one(bottom_frame):
-    root1 = Toplevel(root)
+    root1 = Tk()
     root1.title("Case 1")
 
     sample_user = StringVar()
@@ -222,29 +223,19 @@ def one(bottom_frame):
         letters = get_letters()
         color = get_color()
         case_1(user, color, letters)
-        root1.destroy()
-        root2 = Tk()
-        root2.title("Case #2")
-        scrollbar = Scrollbar(root2, orient=VERTICAL)
-        scrollbar.pack(fill=Y, side=RIGHT)
-        listbox = Listbox(root2)
-        listbox.pack(fill=BOTH, expand=1)
-
-        listbox.config(yscrollcommand=scrollbar.set)
-        scrollbar.config(command=listbox.yview)
-
-        root2.mainloop()
 
 
     apply_but = Button(root1, text="APPLY", background="#148", foreground="#ccc", padx="14", pady="7", font="13",
                        command=apply)
     apply_but.grid(column=1, row=1)
-    root1.mainloop()
+
+
+    root1.after(500, root1.mainloop())
 
 
 
 def two(bottom_frame):
-    root2 = Toplevel(root)
+    root2 = Tk()
     root2.title("Case #2")
 
     day = StringVar()
@@ -314,7 +305,8 @@ def two(bottom_frame):
             result = db.get_result(query)
             if result:
                 for row in result:
-                    listbox.insert(END,start + "-" + end + " : " + str(row))
+                    row1 = str(row)[0: str(row).find(",")].replace("(", "")
+                    listbox.insert(END,start + "-" + end + " : " + str(row1))
         root3.mainloop()
 
 
@@ -323,22 +315,11 @@ def two(bottom_frame):
         sel_month = get_month()
         sel_year = get_year()
         case_2(sel_year, sel_month, sel_day)
-        root2.destroy()
-        root1 = Tk()
-        root1.title("Case #2")
-        scrollbar = Scrollbar(root1, orient=VERTICAL)
-        scrollbar.pack(fill=Y, side=RIGHT)
-        listbox = Listbox(root1)
-        listbox.pack(fill=BOTH, expand=1)
-
-        listbox.config(yscrollcommand=scrollbar.set)
-        scrollbar.config(command=listbox.yview)
-
-        root1.mainloop()
 
     apply_but = Button(root2,text="APPLY", background="#148", foreground="#ccc", padx="14", pady="7", font="13",
                        command=apply)
     apply_but.grid(column=1, row=1)
+
     root2.mainloop()
     # =================================================================
     # Company management wants to get a statistics on the efficiency
@@ -350,7 +331,7 @@ def two(bottom_frame):
 
 def three():
     busy = func.funct[2]
-    root1 = Toplevel(root)
+    root1 = Tk()
     root1.title("Case #3")
     day = StringVar()
     day_list = list(range(1, 32))
@@ -406,7 +387,6 @@ def three():
                     "strftime('%H', start_time) >= '{1}' AND strftime('%H', start_time) < '{2}'".format(
                     form_date, morning_start, morning_end)
         s1 = str(db.get_result(query_morning)[0])
-        print(s1)
         result = s1[1: s1.find(",")]
         query_afternoon = "SELECT COUNT(DISTINCT CID) FROM ride_order WHERE date(start_time) = '{0}' AND " \
                     "strftime('%H', start_time) >= '{1}' AND strftime('%H', start_time) < '{2}'".format(
@@ -438,23 +418,15 @@ def three():
         sel_month = get_month()
         sel_year = get_year()
         case_3(sel_year, sel_month, sel_day)
-        root1.destroy()
-        root2 = Toplevel(root)
-        root2.title("Case #3")
-        scrollbar = Scrollbar(root2, orient=VERTICAL)
-        scrollbar.pack(fill=Y, side=RIGHT)
-        listbox = Listbox(root2)
-        listbox.pack(fill=BOTH, expand=2)
-
-        listbox.config(yscrollcommand=scrollbar.set)
-        scrollbar.config(command=listbox.yview)
-
-        root2.mainloop()
 
     apply_but = Button(root1,text="APPLY", background="#148", foreground="#ccc", padx="14", pady="7", font="13",
                        command=apply)
     apply_but.grid(column=1, row=1)
+    print("Allo")
+    print("Myaw")
     root1.mainloop()
+    print("Allo1")
+
 
 
 def four():
@@ -463,7 +435,7 @@ def four():
 
 
 def five(bottom_frame):
-    root2 = Toplevel(root)
+    root2 = Tk()
     root2.title("Date")
 
     day = StringVar()
@@ -538,18 +510,6 @@ def five(bottom_frame):
         sel_month = get_month()
         sel_year = get_year()
         case_5(sel_year, sel_month, sel_day)
-        root2.destroy()
-        root1 = Tk()
-        root1.title("Case #2")
-        scrollbar = Scrollbar(root1, orient=VERTICAL)
-        scrollbar.pack(fill=Y, side=RIGHT)
-        listbox = Listbox(root1)
-        listbox.pack(fill=BOTH, expand=1)
-
-        listbox.config(yscrollcommand=scrollbar.set)
-        scrollbar.config(command=listbox.yview)
-
-        root1.mainloop()
 
     apply_but = Button(root2, text="APPLY", background="#148", foreground="#ccc", padx="14", pady="7", font="13",
                        command=apply)
@@ -558,7 +518,7 @@ def five(bottom_frame):
 
 
 def six():
-    root2 = Toplevel(root)
+    root2 = Tk()
     root2.title("Date")
 
     day = StringVar()
@@ -706,18 +666,6 @@ def six():
         sel_month = get_month()
         sel_year = get_year()
         case_5(sel_year, sel_month, sel_day)
-        root2.destroy()
-        root1 = Tk()
-        root1.title("Case #2")
-        scrollbar = Scrollbar(root1, orient=VERTICAL)
-        scrollbar.pack(fill=Y, side=RIGHT)
-        listbox = Listbox(root1)
-        listbox.pack(fill=BOTH, expand=1)
-
-        listbox.config(yscrollcommand=scrollbar.set)
-        scrollbar.config(command=listbox.yview)
-
-        root1.mainloop()
 
     apply_but = Button(root2, text="APPLY", background="#148", foreground="#ccc", padx="14", pady="7", font="13",
                        command=apply)
@@ -729,7 +677,7 @@ def seven():
     query = "SELECT CID, COUNT(CID) AS count FROM ride_order GROUP BY CID ORDER BY count ASC LIMIT 0.1 * (SELECT COUNT(*) FROM car)"
     result = db.get_result(query)
     root2 = Tk()
-    root2.title("Case #2")
+    root2.title("Case #7")
     scrollbar = Scrollbar(root2, orient=VERTICAL)
     scrollbar.pack(fill=Y, side=RIGHT)
     listbox = Listbox(root2)
@@ -743,6 +691,7 @@ def seven():
         for row in result:
             listbox.insert(END, row)
     root2.mainloop()
+
 
 
 def eight():
@@ -787,6 +736,7 @@ def eight():
                        command=apply)
     apply_but.grid(column=1, row=1)
     root2.mainloop()
+
 
 def nine():
     root2 = Toplevel(root)
@@ -926,7 +876,12 @@ funct = [one, two, three, four,five, six, seven, eight, nine, ten]
 
 
 def login():
-    keker = func.user(str(entry_login.get()), str(entry_password.get()))
+    global i
+    if i==0:
+        keker = func.user(str(entry_login.get()), str(entry_password.get()))
+        i = 1
+    else:
+        keker = func.user(a, b)
     if (keker):
         root.title("Cases:")
         clean(1)

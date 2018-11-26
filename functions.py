@@ -2,7 +2,7 @@
 
 
 def User(self, login, password):
-    if (login=="admin" and password=="admin"):
+    if (login==password=="admin"):
         return True
     return False
 # Lenur, instead of [] return me array of rows with all shit i need
