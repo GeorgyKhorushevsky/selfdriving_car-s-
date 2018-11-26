@@ -675,11 +675,16 @@ def six():
                        "FROM ride_order WHERE strftime('%H', start_time) >= '{0}' " \
                        "AND strftime('%H', start_time) < '{1}'GROUP BY pick_up_location " \
                        "ORDER BY count DESC LIMIT 3".format(morning_start, morning_end)
-
-        # result = db.get_result(query)
-        # if result:
-            # for row in result:
-                # print(str(row))
+        query_list = []
+        query_list.append(morning_start)
+        query_list.append(morning_end)
+        query_list.append(afternoon_start)
+        query_list.append(afternoon_end)
+        query_list.append(evening_start)
+        query_list.append(evening_end)
+        result = []
+        for query in query_list:
+            result.append(db.get_result(query))
 
     def apply():
         sel_day = get_day()
@@ -753,7 +758,7 @@ def eight():
     root2.mainloop()
 
 def nine():
-    print("kek9")
+    query = ""
 
 
 def ten():
