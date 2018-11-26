@@ -650,9 +650,9 @@ def six():
                        "ORDER BY count DESC LIMIT 3".format(morning_start, morning_end)
 
         # result = db.get_result(query)
-        if result:
-            for row in result:
-                print(str(row))
+        # if result:
+            # for row in result:
+                # print(str(row))
 
     def apply():
         sel_day = get_day()
