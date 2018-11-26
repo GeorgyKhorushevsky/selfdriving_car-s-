@@ -430,8 +430,11 @@ def three():
 
 
 def four():
-    # some shit we don't know what to do
-    print("kek4")
+    query = "SELECT date_time, PID, order_id, username, COUNT(*) FROM payment JOIN customer ON customer,PID = payment.PID GROUP BY date_time, PID, order_id HAVING COUNT(*) > 1"
+    result = db.get_result(query)
+
+    # если возвращает пустоту, то выводим фолс, если нет - то пишем, что есть дабленный пэймент
+
 
 
 def five(bottom_frame):
@@ -674,7 +677,7 @@ def six():
 
 
 def seven():
-    query = "SELECT CID, COUNT(CID) AS count FROM ride_order GROUP BY CID ORDER BY count ASC LIMIT 0.1 * (SELECT COUNT(*) FROM car)"
+    query = "SELECT CID, COUNT(CID) AS count FROM ride_order GROUP BY CID ORDER BY count ASC LIMIT CAST(0.1*(SELECT COUNT(*) FROM car) AS INTEGER)"
     result = db.get_result(query)
     root2 = Tk()
     root2.title("Case #7")
@@ -695,41 +698,133 @@ def seven():
 
 
 def eight():
-    root2 = Tk()
+    root2 = Toplevel(root)
     root2.title("Date")
-    countryVar = StringVar()
-    countryCombo = ttk.Combobox(root2, textvariable=countryVar)
-    countryCombo['values'] = (
-        '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18',
-        '19', '20', '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31')
-    countryCombo.current(1)
-    countryCombo.grid(row=0, column=1, padx=5, pady=5, ipady=2, sticky=W)
-    countryVar1 = StringVar()
-    countryCombo1 = ttk.Combobox(root2, textvariable=countryVar1)
-    countryCombo1['values'] = (
-        '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11')
-    countryCombo1.current(1)
-    countryCombo1.grid(row=0, column=0, padx=5, pady=5, ipady=2, sticky=W)
-    countryVar2 = StringVar()
-    countryCombo2 = ttk.Combobox(root2, textvariable=countryVar2)
-    countryCombo2['values'] = (
-        '99', '00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15', '16',
-        '17', '18', '19', '20')
-    countryCombo2.current(1)
-    countryCombo2.grid(row=0, column=2, padx=5, pady=5, ipady=2, sticky=W)
-    entry_month = Entry(root2, foreground="black", background="white", font="60")
+
+    day = StringVar()
+    day_list = list(range(1, 32))
+    days = ttk.Combobox(root2, textvariable=day)
+    days['values'] = day_list
+    days.current(1)
+    days.grid(row=0, column=1, padx=5, pady=5, ipady=2, sticky=W)
+
+    month = StringVar()
+    months = ttk.Combobox(root2, textvariable=month)
+    month_list = list(range(1, 13))
+    months['values'] = month_list
+    months.current(1)
+    months.grid(row=0, column=0, padx=5, pady=5, ipady=2, sticky=W)
+
+    year = StringVar()
+    years = ttk.Combobox(root2, textvariable=year)
+    year_list = list(range(2015, 2020))
+    years['values'] = year_list
+    years.current(1)
+    years.grid(row=0, column=2, padx=5, pady=5, ipady=2, sticky=W)
+
+    day2 = StringVar()
+    day_list2 = list(range(1, 32))
+    days2 = ttk.Combobox(root2, textvariable=day)
+    days2['values'] = day_list
+    days2.current(1)
+    days2.grid(row=1, column=1, padx=5, pady=5, ipady=2, sticky=W)
+
+    month2 = StringVar()
+    months2 = ttk.Combobox(root2, textvariable=month)
+    month_list2 = list(range(1, 13))
+    months2['values'] = month_list
+    months2.current(1)
+    months2.grid(row=1, column=0, padx=5, pady=5, ipady=2, sticky=W)
+
+    year2 = StringVar()
+    years2 = ttk.Combobox(root2, textvariable=year)
+    year_list2 = list(range(2015, 2020))
+    years2['values'] = year_list
+    years2.current(1)
+    years2.grid(row=1, column=2, padx=5, pady=5, ipady=2, sticky=W)
+
+    # entry_month = Entry(root2, foreground="black", background="white", font="60")
+
+    def get_day(*args):
+        selected_day = int(day.get())
+        return selected_day
+
+    def get_month(*args):
+        selected_month = int(month.get())
+        return selected_month
+
+    def get_year(*args):
+        selected_year = int(year.get())
+        return selected_year
+
+    def get_day2(*args):
+        selected_day = int(day2.get())
+        return selected_day
+
+    def get_month2(*args):
+        selected_month = int(month2.get())
+        return selected_month
+
+    def get_year2(*args):
+        selected_year = int(year2.get())
+        return selected_year
+
+    day.trace('w', get_day)
+    month.trace('w', get_month)
+    year.trace('w', get_year)
+    day2.trace('w', get_day2)
+    month2.trace('w', get_month2)
+    year2.trace('w', get_year2)
+
+    def case_8(year, month, day, year2, month2, day2):
+        form_date = datetime(year, month, day).date()
+        form2_date = datetime(year2, month2, day2).date()
+        users = db.get_result("SELECT PID FROM customers")
+        users_id = []
+        for row in users:
+            users_id.append(row[0])
+        for id in users_id:
+            query = "SELECT PID, COUNT(*) FROM charging_order AS co, ride_order AS ro WHERE " \
+                    "co.CID = ro.CID AND date(ro.start_time) >= '{0}' AND date(ro.start_time) <= '{1}'" \
+                    "AND ro.PID = {2} AND date(co.start_time) = date(ro.start_time)".format(form_date, form2_date, id)
+            result = db.get_result(query)
+            print(result)
+
+        result = db.get_result(query)
+        root2 = Toplevel(root)
+        root2.title("Case #3")
+        scrollbar = Scrollbar(root2, orient=VERTICAL)
+        scrollbar.pack(fill=Y, side=RIGHT)
+        listbox = Listbox(root2)
+        listbox.pack(fill=BOTH, expand=2)
+
+        listbox.config(yscrollcommand=scrollbar.set)
+        scrollbar.config(command=listbox.yview)
+
+        if result:
+            for row in result:
+                listbox.insert(END, str(row))
+        root2.mainloop()
 
     def apply():
-        arra = func.funct[7]([int(countryCombo1.get()), int(countryCombo.get()), int(countryCombo2.get())])
+        sel_day = get_day()
+        sel_month = get_month()
+        sel_year = get_year()
+        sel_year2 = get_year2()
+        sel_month2 = get_month2()
+        sel_day2 = get_day2()
+        case_8(sel_year, sel_month, sel_day, sel_year2, sel_month2, sel_day2)
         root2.destroy()
         root1 = Tk()
-        root1.title("Case 8")
+        root1.title("Case #2")
+        scrollbar = Scrollbar(root1, orient=VERTICAL)
+        scrollbar.pack(fill=Y, side=RIGHT)
         listbox = Listbox(root1)
         listbox.pack(fill=BOTH, expand=1)
-        listbox.insert("UserId     Amount")
-        for i in range(len(arra)):
-            kek = str(arra[i][0]) + "        " + str(arra[i][1])
-            listbox.insert(END, kek)
+
+        listbox.config(yscrollcommand=scrollbar.set)
+        scrollbar.config(command=listbox.yview)
+
         root1.mainloop()
 
     apply_but = Button(root2, text="APPLY", background="#148", foreground="#ccc", padx="14", pady="7", font="13",
@@ -817,7 +912,7 @@ def nine():
     month2.trace('w', get_month2)
     year2.trace('w', get_year2)
 
-    def case_8(year, month, day, year2, month2, day2):
+    def case_9(year, month, day, year2, month2, day2):
         date_from = datetime(year, month, day)
         date_until = datetime(year2, month2, day2)
         query = "SELECT WID FROM workshop"
@@ -830,10 +925,11 @@ def nine():
             query = "SELECT part_name, SUM(rcp.amount), crh.WID AS total_amount FROM repaired_car_parts " \
                     "AS rcp JOIN car_repair_history AS crh ON rcp.repair_ticket_id = crh.repair_ticket_id " \
                     "WHERE date(crh.date_time) >= '{0}' AND date(crh.date_time) <= '{1}' AND crh.WID = '{2}' " \
-                    "GROUP BY crh.WID, rcp.part_name ORDER BY crh.WID, amount DESC".format(date_from, date_until, id)
+                    "GROUP BY crh.WID, rcp.part_name ORDER BY crh.WID, amount DESC LIMIT 1".format(date_from, date_until, id)
             result = db.get_result(query)
             for row in result:
                 print(row)
+
     def apply():
         sel_day = get_day()
         sel_month = get_month()
@@ -841,7 +937,7 @@ def nine():
         sel_day2 = get_day2()
         sel_month2 = get_month2()
         sel_year2 = get_year2()
-        case_8(sel_year, sel_month, sel_day, sel_year2, sel_month2, sel_day2)
+        case_9(sel_year, sel_month, sel_day, sel_year2, sel_month2, sel_day2)
         root2.destroy()
         root1 = Tk()
         root1.title("Case #2")
