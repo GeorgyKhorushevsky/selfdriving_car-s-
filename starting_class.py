@@ -1002,4 +1002,9 @@ entry_password.place(x=300, y=290)
 login_but = Button(text="Log in", background="#148", foreground="#ccc", padx="14", pady="7", font="13", command=login)
 login_but.place(x=250, y=350)
 centralize()
+
+#temporary
+entry_login.insert(END, "admin")
+entry_password.insert(END, "admin")
+
 root.mainloop()
