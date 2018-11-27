@@ -203,6 +203,11 @@ def sampling(db):
     for i in range(0, 20):
         date1, date2 = two_random_dates()
         db.insert('payment', 'date_time,PID,order_id', combine(date1, random.randint(1, 8), order_id[i]))
+    date1, date2 = two_random_dates()
+    db.insert('payment', 'date_time,PID,order_id', combine(date1, 3, order_id[2]))
+    db.insert('payment', 'date_time,PID,order_id', combine(date1, 3, order_id[2]))
+
+
 
 
 def simplest_password_hash():

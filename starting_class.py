@@ -16,7 +16,6 @@ db_init.init(db)
 db_sampling.sampling(db)
 root = Tk()
 root.title("Login page")
-# root.geometry("850x500")
 xm, ym = 850, 500
 func = functions()
 canv = Canvas(root, width=xm, heigh=ym)
@@ -116,15 +115,15 @@ def init():
     def change_dropdown(*args):
         selected_value = var.get()
         if selected_value == '1':
-            one(bottom_frame)
+            one()
         elif selected_value == '2':
-            two(bottom_frame)
+            two()
         elif selected_value == '3':
             three()
         elif selected_value == '4':
             four()
         elif selected_value == '5':
-            five(bottom_frame)
+            five()
         elif selected_value == '6':
             six()
         elif selected_value == '7':
@@ -166,8 +165,8 @@ canv.create_text(xm - 130, 35, text="login: admin")
 canv.create_text(xm - 130, 50, text="password: admin")
 
 
-def one(bottom_frame):
-    root1 = Tk()
+def one():
+    root1 = Toplevel(root)
     root1.title("Case 1")
 
     sample_user = StringVar()
@@ -232,7 +231,7 @@ def one(bottom_frame):
     root1.after(500, root1.mainloop())
 
 
-def two(bottom_frame):
+def two():
     root2 = Toplevel(root)
     root2.title("Case #2")
 
@@ -256,8 +255,6 @@ def two(bottom_frame):
     years['values'] = year_list
     years.current(1)
     years.grid(row=0, column=2, padx=5, pady=5, ipady=2, sticky=W)
-
-    # entry_month = Entry(root2, foreground="black", background="white", font="60")
 
     def get_day(*args):
         selected_day = int(day.get())
@@ -310,37 +307,55 @@ def two(bottom_frame):
     apply_but.grid(column=1, row=1)
 
     root2.mainloop()
-    # =================================================================
-    # Company management wants to get a statistics on the efficiency
-    # of charging stations utilization. Given a date, compute how many
-    # sockets were occupied each hour.
-    # =================================================================
 
 
 def three():
-    busy = func.funct[2]
-    root1 = Tk()
-    root1.title("Case #3")
+    root2 = Toplevel(root)
+    root2.title("Case #3")
+
     day = StringVar()
     day_list = list(range(1, 32))
-    days = ttk.Combobox(root1, textvariable=day)
+    days = ttk.Combobox(root2, textvariable=day)
     days['values'] = day_list
     days.current(1)
     days.grid(row=0, column=1, padx=5, pady=5, ipady=2, sticky=W)
 
     month = StringVar()
-    months = ttk.Combobox(root1, textvariable=month)
+    months = ttk.Combobox(root2, textvariable=month)
     month_list = list(range(1, 13))
     months['values'] = month_list
     months.current(1)
     months.grid(row=0, column=0, padx=5, pady=5, ipady=2, sticky=W)
 
     year = StringVar()
-    years = ttk.Combobox(root1, textvariable=year)
+    years = ttk.Combobox(root2, textvariable=year)
     year_list = list(range(2015, 2020))
     years['values'] = year_list
     years.current(1)
     years.grid(row=0, column=2, padx=5, pady=5, ipady=2, sticky=W)
+
+    day2 = StringVar()
+    day_list2 = list(range(1, 32))
+    days2 = ttk.Combobox(root2, textvariable=day2)
+    days2['values'] = day_list2
+    days2.current(1)
+    days2.grid(row=1, column=1, padx=5, pady=5, ipady=2, sticky=W)
+
+    month2 = StringVar()
+    months2 = ttk.Combobox(root2, textvariable=month2)
+    month_list2 = list(range(1, 13))
+    months2['values'] = month_list2
+    months2.current(1)
+    months2.grid(row=1, column=0, padx=5, pady=5, ipady=2, sticky=W)
+
+    year2 = StringVar()
+    years2 = ttk.Combobox(root2, textvariable=year2)
+    year_list2 = list(range(2015, 2020))
+    years2['values'] = year_list2
+    years2.current(4)
+    years2.grid(row=1, column=2, padx=5, pady=5, ipady=2, sticky=W)
+
+    # entry_month = Entry(root2, foreground="black", background="white", font="60")
 
     def get_day(*args):
         selected_day = int(day.get())
@@ -354,11 +369,26 @@ def three():
         selected_year = int(year.get())
         return selected_year
 
+    def get_day2(*args):
+        selected_day = int(day2.get())
+        return selected_day
+
+    def get_month2(*args):
+        selected_month = int(month2.get())
+        return selected_month
+
+    def get_year2(*args):
+        selected_year = int(year2.get())
+        return selected_year
+
     day.trace('w', get_day)
     month.trace('w', get_month)
     year.trace('w', get_year)
+    day2.trace('w', get_day2)
+    month2.trace('w', get_month2)
+    year2.trace('w', get_year2)
 
-    def case_3(year, month, day):
+    def case_3(year, month, day, year2, month2, day2):
         # for morning (7 AM - 10 AM)
         morning_start = datetime(year, month, day, 7, 00).strftime('%H')
         morning_end = datetime(year, month, day, 10, 00).strftime('%H')
@@ -370,20 +400,21 @@ def three():
         evening_end = datetime(year, month, day, 19, 00).strftime('%H')
 
         form_date = datetime(year, month, day).date()
+        form_date2 = datetime(year2, month2, day2).date()
 
-        query_morning = "SELECT COUNT(DISTINCT CID) FROM ride_order WHERE date(start_time) = '{0}' AND " \
-                        "strftime('%H', start_time) >= '{1}' AND strftime('%H', start_time) < '{2}'".format(
-            form_date, morning_start, morning_end)
+        query_morning = "SELECT COUNT(DISTINCT CID) FROM ride_order WHERE date(start_time) >= '{0}' AND " \
+                        "date(start_time) <= '{1}' AND strftime('%H', start_time) >= '{2}' AND strftime('%H', start_time) < '{3}'".format(
+            form_date, form_date2, morning_start, morning_end)
         s1 = str(db.get_result(query_morning)[0])
         result = s1[1: s1.find(",")]
-        query_afternoon = "SELECT COUNT(DISTINCT CID) FROM ride_order WHERE date(start_time) = '{0}' AND " \
-                          "strftime('%H', start_time) >= '{1}' AND strftime('%H', start_time) < '{2}'".format(
-            form_date, afternoon_start, afternoon_end)
+        query_afternoon = "SELECT COUNT(DISTINCT CID) FROM ride_order WHERE date(start_time) >= '{0}' AND " \
+                          "date(start_time) <= '{1}' AND strftime('%H', start_time) >= '{2}' AND strftime('%H', start_time) < '{3}'".format(
+            form_date, form_date2, afternoon_start, afternoon_end)
         s2 = str(db.get_result(query_afternoon)[0])
-        result += "                " + s2[1: s1.find(",")]
-        query_evening = "SELECT COUNT(DISTINCT CID) FROM ride_order WHERE date(start_time) = '{0}' AND " \
-                        "strftime('%H', start_time) >= '{1}' AND strftime('%H', start_time) < '{2}'".format(
-            form_date, evening_start, evening_end)
+        result += "                " + s2[1: s2.find(",")]
+        query_evening = "SELECT COUNT(DISTINCT CID) FROM ride_order WHERE date(start_time) >= '{0}' AND " \
+                        "date(start_time) <= '{1}' AND strftime('%H', start_time) >= '{2}' AND strftime('%H', start_time) < '{3}'".format(
+            form_date, form_date2, evening_start, evening_end)
         s3 = str(db.get_result(query_evening)[0])
         result += "                " + s3[1: s3.find(",")]
         root2 = Toplevel(root)
@@ -404,19 +435,22 @@ def three():
         sel_day = get_day()
         sel_month = get_month()
         sel_year = get_year()
-        case_3(sel_year, sel_month, sel_day)
+        sel_day2 = get_day2()
+        sel_month2 = get_month2()
+        sel_year2 = get_year2()
+        case_3(sel_year, sel_month, sel_day, sel_year2, sel_month2, sel_day2)
 
-    apply_but = Button(root1, text="APPLY", background="#148", foreground="#ccc", padx="14", pady="7", font="13",
+    apply_but = Button(root2, text="APPLY", background="#148", foreground="#ccc", padx="14", pady="7", font="13",
                        command=apply)
-    apply_but.grid(column=1, row=1)
-    root1.mainloop()
+    apply_but.grid(column=1, row=2)
+    root2.mainloop()
 
 
 def four():
-    query = "SELECT date_time, PID, order_id, username, COUNT(*) FROM payment JOIN customer ON customer.PID = payment.PID GROUP BY date_time, PID, order_id HAVING COUNT(*) > 1"
+    query = "SELECT date_time,  customer.PID, order_id, username, COUNT(*) FROM payment JOIN customer ON customer.PID = payment.PID GROUP BY date_time, customer.PID, order_id HAVING COUNT(*) > 1"
     result = db.get_result(query)
     root2 = Toplevel(root)
-    root2.title("Case #1")
+    root2.title("Case #4")
     scrollbar = Scrollbar(root2, orient=VERTICAL)
     scrollbar.pack(fill=Y, side=RIGHT)
     listbox = Listbox(root2)
@@ -429,10 +463,9 @@ def four():
     else:
         listbox.insert(END, result)
     root2.mainloop()
-    # если возвращает пустоту, то выводим фолс, если нет - то пишем, что есть дабленный пэймент
 
 
-def five(bottom_frame):
+def five():
     root2 = Toplevel(root)
     root2.title("Date")
 
@@ -456,8 +489,6 @@ def five(bottom_frame):
     years['values'] = year_list
     years.current(1)
     years.grid(row=0, column=2, padx=5, pady=5, ipady=2, sticky=W)
-
-    # entry_month = Entry(root2, foreground="black", background="white", font="60")
 
     def get_day(*args):
         selected_day = int(day.get())
@@ -508,7 +539,7 @@ def five(bottom_frame):
 
 
 def six():
-    root2 = Tk()
+    root2 = Toplevel(root)
     root2.title("Date")
 
     day = StringVar()
@@ -534,22 +565,22 @@ def six():
 
     day2 = StringVar()
     day_list2 = list(range(1, 32))
-    days2 = ttk.Combobox(root2, textvariable=day)
-    days2['values'] = day_list
+    days2 = ttk.Combobox(root2, textvariable=day2)
+    days2['values'] = day_list2
     days2.current(1)
     days2.grid(row=1, column=1, padx=5, pady=5, ipady=2, sticky=W)
 
     month2 = StringVar()
-    months2 = ttk.Combobox(root2, textvariable=month)
+    months2 = ttk.Combobox(root2, textvariable=month2)
     month_list2 = list(range(1, 13))
-    months2['values'] = month_list
+    months2['values'] = month_list2
     months2.current(1)
     months2.grid(row=1, column=0, padx=5, pady=5, ipady=2, sticky=W)
 
     year2 = StringVar()
-    years2 = ttk.Combobox(root2, textvariable=year)
+    years2 = ttk.Combobox(root2, textvariable=year2)
     year_list2 = list(range(2015, 2020))
-    years2['values'] = year_list
+    years2['values'] = year_list2
     years2.current(1)
     years2.grid(row=1, column=2, padx=5, pady=5, ipady=2, sticky=W)
 
@@ -586,10 +617,10 @@ def six():
     month2.trace('w', get_month2)
     year2.trace('w', get_year2)
 
-    def case_5(year, month, day):
+    def case_6(year, month, day):
         # for morning (7 AM - 10 AM)
-        morning_start = datetime(year, month, day, 7, 00).strftime('%H')
-        morning_end = datetime(year, month, day, 10, 00).strftime('%H')
+        morning_start = datetime(year, month, day, 7, 00).hour
+        morning_end = datetime(year, month, day, 10, 00).hour
         # for afternoon (12 AM - 2 PM)
         afternoon_start = datetime(year, month, day, 12, 00).strftime('%H')
         afternoon_end = datetime(year, month, day, 14, 00).strftime('%H')
@@ -634,9 +665,9 @@ def six():
         query_list.append(evening_end)
         result = []
         for query in query_list:
-            result.append(db.get_result(query))
-        root2 = Tk()
-        root2.title("Case #1")
+            result.append(str(db.get_result(query)))
+        root2 = Toplevel(root)
+        root2.title("Case #6")
         scrollbar = Scrollbar(root2, orient=VERTICAL)
         scrollbar.pack(fill=Y, side=RIGHT)
         listbox = Listbox(root2)
@@ -655,32 +686,128 @@ def six():
         sel_day = get_day()
         sel_month = get_month()
         sel_year = get_year()
-        case_5(sel_year, sel_month, sel_day)
+        case_6(sel_year, sel_month, sel_day)
 
     apply_but = Button(root2, text="APPLY", background="#148", foreground="#ccc", padx="14", pady="7", font="13",
                        command=apply)
-    apply_but.grid(column=1, row=1)
+    apply_but.grid(column=1, row=2)
     root2.mainloop()
 
 
 def seven():
-    query = "SELECT CID, COUNT(CID) AS count FROM ride_order GROUP BY CID ORDER BY count ASC LIMIT CAST(0.1*(SELECT COUNT(*) FROM car) AS INTEGER)"
-    result = db.get_result(query)
-    root2 = Tk()
-    root2.title("Case #7")
-    scrollbar = Scrollbar(root2, orient=VERTICAL)
-    scrollbar.pack(fill=Y, side=RIGHT)
-    listbox = Listbox(root2)
-    listbox.pack(fill=BOTH, expand=1)
+    root2 = Toplevel(root)
+    root2.title("Date")
 
-    listbox.config(yscrollcommand=scrollbar.set)
-    scrollbar.config(command=listbox.yview)
-    if len(result) == 0:
-        listbox.insert(END, "No matches")
-    else:
-        for row in result:
-            listbox.insert(END, row)
+    day = StringVar()
+    day_list = list(range(1, 32))
+    days = ttk.Combobox(root2, textvariable=day)
+    days['values'] = day_list
+    days.current(1)
+    days.grid(row=0, column=1, padx=5, pady=5, ipady=2, sticky=W)
+
+    month = StringVar()
+    months = ttk.Combobox(root2, textvariable=month)
+    month_list = list(range(1, 13))
+    months['values'] = month_list
+    months.current(1)
+    months.grid(row=0, column=0, padx=5, pady=5, ipady=2, sticky=W)
+
+    year = StringVar()
+    years = ttk.Combobox(root2, textvariable=year)
+    year_list = list(range(2015, 2020))
+    years['values'] = year_list
+    years.current(1)
+    years.grid(row=0, column=2, padx=5, pady=5, ipady=2, sticky=W)
+
+    day2 = StringVar()
+    day_list2 = list(range(1, 32))
+    days2 = ttk.Combobox(root2, textvariable=day2)
+    days2['values'] = day_list2
+    days2.current(1)
+    days2.grid(row=1, column=1, padx=5, pady=5, ipady=2, sticky=W)
+
+    month2 = StringVar()
+    months2 = ttk.Combobox(root2, textvariable=month2)
+    month_list2 = list(range(1, 13))
+    months2['values'] = month_list2
+    months2.current(1)
+    months2.grid(row=1, column=0, padx=5, pady=5, ipady=2, sticky=W)
+
+    year2 = StringVar()
+    years2 = ttk.Combobox(root2, textvariable=year2)
+    year_list2 = list(range(2015, 2020))
+    years2['values'] = year_list2
+    years2.current(1)
+    years2.grid(row=1, column=2, padx=5, pady=5, ipady=2, sticky=W)
+
+    def get_day(*args):
+        selected_day = int(day.get())
+        return selected_day
+
+    def get_month(*args):
+        selected_month = int(month.get())
+        return selected_month
+
+    def get_year(*args):
+        selected_year = int(year.get())
+        return selected_year
+
+    def get_day2(*args):
+        selected_day = int(day2.get())
+        return selected_day
+
+    def get_month2(*args):
+        selected_month = int(month2.get())
+        return selected_month
+
+    def get_year2(*args):
+        selected_year = int(year2.get())
+        return selected_year
+
+    day.trace('w', get_day)
+    month.trace('w', get_month)
+    year.trace('w', get_year)
+    day2.trace('w', get_day2)
+    month2.trace('w', get_month2)
+    year2.trace('w', get_year2)
+
+
+    def case_7(year, month, day, year2, month2, day2):
+        date1 = datetime(year, month, day).date()
+        date2 = datetime(year2, month2, day2).date()
+        query = "SELECT CID, COUNT(CID) AS count FROM ride_order WHERE date(start_time) >= '{0}' AND date(start_time) <= '{1}' GROUP BY CID ORDER BY count ASC LIMIT CAST(0.1*(SELECT COUNT(*) FROM car) AS INTEGER)".format(date1, date2)
+        result = db.get_result(query)
+        root2 = Toplevel()
+        root2.title("Case #7")
+        scrollbar = Scrollbar(root2, orient=VERTICAL)
+        scrollbar.pack(fill=Y, side=RIGHT)
+        listbox = Listbox(root2)
+        listbox.pack(fill=BOTH, expand=1)
+
+        listbox.config(yscrollcommand=scrollbar.set)
+        scrollbar.config(command=listbox.yview)
+        if len(result) == 0:
+            listbox.insert(END, "No matches")
+        else:
+            for row in result:
+                listbox.insert(END, row)
+        root2.mainloop()
+
+
+    def apply():
+        sel_day = get_day()
+        sel_month = get_month()
+        sel_year = get_year()
+        sel_day2 = get_day2()
+        sel_month2 = get_month2()
+        sel_year2 = get_year2()
+        case_7(sel_year, sel_month, sel_day, sel_year2, sel_month2, sel_day2)
+
+    apply_but = Button(root2, text="APPLY", background="#148", foreground="#ccc", padx="14", pady="7", font="13",
+                       command=apply)
+    apply_but.grid(column=1, row=2)
     root2.mainloop()
+
 
 
 def eight():
@@ -1004,6 +1131,8 @@ def ten():
             date)
         res = db.get_result(query1)
         res2 = db.get_result(query2)
+        print(str(res))
+        print(str(res2))
 
     def apply():
         sel_day = get_day()
