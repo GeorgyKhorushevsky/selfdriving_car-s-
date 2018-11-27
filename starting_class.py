@@ -166,19 +166,22 @@ def one():
     root1 = Toplevel(root)
     root1.title("Case 1")
 
+    Label(root1, text="Username").grid(row=0, column=0)
     sample_user = StringVar()
     username = Entry(root1, textvariable=sample_user)
-    username.grid(row=0, column=1, padx=5, pady=5, ipady=2, sticky=W)
+    username.grid(row=1, column=0, padx=5, pady=5, ipady=2, sticky=W)
     sample_user.set("john_doe")
 
+    Label(root1, text="License plate").grid(row=0, column=1)
     sample_letters = StringVar()
     first_letters = Entry(root1, textvariable=sample_letters)
-    first_letters.grid(row=0, column=2, padx=5, pady=2, sticky=W)
+    first_letters.grid(row=1, column=1, padx=5, pady=2, sticky=W)
     sample_letters.set("AN")
 
+    Label(root1, text="Color").grid(row=0, column=2)
     sample_color = StringVar()
     color = Entry(root1, textvariable=sample_color)
-    color.grid(row=0, column=3, padx=5, pady=2, sticky=W)
+    color.grid(row=1, column=2, padx=5, pady=2, sticky=W)
     sample_color.set("red")
 
     def get_username():
@@ -219,7 +222,7 @@ def one():
 
     apply_but = Button(root1, text="APPLY", background="#148", foreground="#ccc", padx="14", pady="7", font="13",
                        command=apply)
-    apply_but.grid(column=1, row=1)
+    apply_but.grid(column=0, row=2)
 
     root1.after(500, root1.mainloop())
 
@@ -228,26 +231,28 @@ def two():
     root2 = Toplevel(root)
     root2.title("Case #2")
 
+    Label(root2, text="Day").grid(row=0, column=0)
     day = StringVar()
     day_list = list(range(1, 32))
     days = ttk.Combobox(root2, textvariable=day)
     days['values'] = day_list
-    days.current(1)
-    days.grid(row=0, column=1, padx=5, pady=5, ipady=2, sticky=W)
+    days.current(0)
+    days.grid(row=1, column=0, padx=5, pady=5, ipady=2, sticky=W)
 
+    Label(root2, text="Month").grid(row=0, column=1)
     month = StringVar()
     months = ttk.Combobox(root2, textvariable=month)
     month_list = list(range(1, 13))
     months['values'] = month_list
-    months.current(1)
-    months.grid(row=0, column=0, padx=5, pady=5, ipady=2, sticky=W)
+    months.current(0)
+    months.grid(row=1, column=1, padx=5, pady=5, ipady=2, sticky=W)
 
+    Label(root2, text="Year").grid(row=0, column=2)
     year = StringVar()
     years = ttk.Combobox(root2, textvariable=year)
-    year_list = list(range(2015, 2020))
-    years['values'] = year_list
-    years.current(1)
-    years.grid(row=0, column=2, padx=5, pady=5, ipady=2, sticky=W)
+    years['values'] = [2018]
+    years.current(0)
+    years.grid(row=1, column=2, padx=5, pady=5, ipady=2, sticky=W)
 
     def get_day(*args):
         selected_day = int(day.get())
@@ -293,7 +298,7 @@ def two():
 
     apply_but = Button(root2, text="APPLY", background="#148", foreground="#ccc", padx="14", pady="7", font="13",
                        command=apply)
-    apply_but.grid(column=1, row=1)
+    apply_but.grid(column=1, row=2)
 
     root2.mainloop()
 
@@ -302,47 +307,48 @@ def three():
     root2 = Toplevel(root)
     root2.title("Case #3")
 
+    Label(root2, text="Day").grid(row=0, column=0)
     day = StringVar()
     day_list = list(range(1, 32))
     days = ttk.Combobox(root2, textvariable=day)
     days['values'] = day_list
-    days.current(1)
-    days.grid(row=0, column=1, padx=5, pady=5, ipady=2, sticky=W)
+    days.current(0)
+    days.grid(row=1, column=1, padx=5, pady=5, ipady=2, sticky=W)
 
+    Label(root2, text="Month").grid(row=0, column=1)
     month = StringVar()
     months = ttk.Combobox(root2, textvariable=month)
     month_list = list(range(1, 13))
     months['values'] = month_list
-    months.current(1)
-    months.grid(row=0, column=0, padx=5, pady=5, ipady=2, sticky=W)
+    months.current(0)
+    months.grid(row=1, column=0, padx=5, pady=5, ipady=2, sticky=W)
 
+    Label(root2, text="Year").grid(row=0, column=2)
     year = StringVar()
     years = ttk.Combobox(root2, textvariable=year)
-    year_list = list(range(2015, 2020))
-    years['values'] = year_list
-    years.current(1)
-    years.grid(row=0, column=2, padx=5, pady=5, ipady=2, sticky=W)
+    years['values'] = [2018]
+    years.current(0)
+    years.grid(row=1, column=2, padx=5, pady=5, ipady=2, sticky=W)
 
     day2 = StringVar()
     day_list2 = list(range(1, 32))
     days2 = ttk.Combobox(root2, textvariable=day2)
     days2['values'] = day_list2
-    days2.current(1)
-    days2.grid(row=1, column=1, padx=5, pady=5, ipady=2, sticky=W)
+    days2.current(30)
+    days2.grid(row=2, column=0, padx=5, pady=5, ipady=2, sticky=W)
 
     month2 = StringVar()
     months2 = ttk.Combobox(root2, textvariable=month2)
     month_list2 = list(range(1, 13))
     months2['values'] = month_list2
-    months2.current(1)
-    months2.grid(row=1, column=0, padx=5, pady=5, ipady=2, sticky=W)
+    months2.current(11)
+    months2.grid(row=2, column=1, padx=5, pady=5, ipady=2, sticky=W)
 
     year2 = StringVar()
     years2 = ttk.Combobox(root2, textvariable=year2)
-    year_list2 = list(range(2015, 2020))
-    years2['values'] = year_list2
-    years2.current(4)
-    years2.grid(row=1, column=2, padx=5, pady=5, ipady=2, sticky=W)
+    years2['values'] = [2018]
+    years2.current(0)
+    years2.grid(row=2, column=2, padx=5, pady=5, ipady=2, sticky=W)
 
     # entry_month = Entry(root2, foreground="black", background="white", font="60")
 
@@ -424,7 +430,7 @@ def three():
 
     apply_but = Button(root2, text="APPLY", background="#148", foreground="#ccc", padx="14", pady="7", font="13",
                        command=apply)
-    apply_but.grid(column=1, row=2)
+    apply_but.grid(row=3, column=1)
     root2.mainloop()
 
 
@@ -451,26 +457,28 @@ def five():
     root2 = Toplevel(root)
     root2.title("Date")
 
+    Label(root2, text="Day").grid(row=0, column=0)
     day = StringVar()
     day_list = list(range(1, 32))
     days = ttk.Combobox(root2, textvariable=day)
     days['values'] = day_list
-    days.current(1)
-    days.grid(row=0, column=1, padx=5, pady=5, ipady=2, sticky=W)
+    days.current(0)
+    days.grid(row=1, column=0, padx=5, pady=5, ipady=2, sticky=W)
 
+    Label(root2, text="Month").grid(row=0, column=1)
     month = StringVar()
     months = ttk.Combobox(root2, textvariable=month)
     month_list = list(range(1, 13))
     months['values'] = month_list
-    months.current(1)
-    months.grid(row=0, column=0, padx=5, pady=5, ipady=2, sticky=W)
+    months.current(0)
+    months.grid(row=1, column=1, padx=5, pady=5, ipady=2, sticky=W)
 
+    Label(root2, text="Year").grid(row=0, column=2)
     year = StringVar()
     years = ttk.Combobox(root2, textvariable=year)
-    year_list = list(range(2015, 2020))
-    years['values'] = year_list
-    years.current(1)
-    years.grid(row=0, column=2, padx=5, pady=5, ipady=2, sticky=W)
+    years['values'] = [2018]
+    years.current(0)
+    years.grid(row=1, column=2, padx=5, pady=5, ipady=2, sticky=W)
 
     def get_day(*args):
         selected_day = int(day.get())
@@ -512,7 +520,7 @@ def five():
 
     apply_but = Button(root2, text="APPLY", background="#148", foreground="#ccc", padx="14", pady="7", font="13",
                        command=apply)
-    apply_but.grid(column=1, row=1)
+    apply_but.grid(row=2, column=1)
     root2.mainloop()
 
 
@@ -520,47 +528,48 @@ def six():
     root2 = Toplevel(root)
     root2.title("Date")
 
+    Label(root2, text="Day").grid(row=0, column=0)
     day = StringVar()
     day_list = list(range(1, 32))
     days = ttk.Combobox(root2, textvariable=day)
     days['values'] = day_list
-    days.current(1)
-    days.grid(row=0, column=1, padx=5, pady=5, ipady=2, sticky=W)
+    days.current(0)
+    days.grid(row=1, column=0, padx=5, pady=5, ipady=2, sticky=W)
 
+    Label(root2, text="Month").grid(row=0, column=1)
     month = StringVar()
     months = ttk.Combobox(root2, textvariable=month)
     month_list = list(range(1, 13))
     months['values'] = month_list
-    months.current(1)
-    months.grid(row=0, column=0, padx=5, pady=5, ipady=2, sticky=W)
+    months.current(0)
+    months.grid(row=1, column=1, padx=5, pady=5, ipady=2, sticky=W)
 
+    Label(root2, text="Year").grid(row=0, column=2)
     year = StringVar()
     years = ttk.Combobox(root2, textvariable=year)
-    year_list = list(range(2015, 2020))
-    years['values'] = year_list
-    years.current(1)
-    years.grid(row=0, column=2, padx=5, pady=5, ipady=2, sticky=W)
+    years['values'] = [2018]
+    years.current(0)
+    years.grid(row=1, column=2, padx=5, pady=5, ipady=2, sticky=W)
 
     day2 = StringVar()
     day_list2 = list(range(1, 32))
     days2 = ttk.Combobox(root2, textvariable=day2)
     days2['values'] = day_list2
-    days2.current(1)
-    days2.grid(row=1, column=1, padx=5, pady=5, ipady=2, sticky=W)
+    days2.current(30)
+    days2.grid(row=2, column=0, padx=5, pady=5, ipady=2, sticky=W)
 
     month2 = StringVar()
     months2 = ttk.Combobox(root2, textvariable=month2)
     month_list2 = list(range(1, 13))
     months2['values'] = month_list2
-    months2.current(1)
-    months2.grid(row=1, column=0, padx=5, pady=5, ipady=2, sticky=W)
+    months2.current(11)
+    months2.grid(row=2, column=1, padx=5, pady=5, ipady=2, sticky=W)
 
     year2 = StringVar()
     years2 = ttk.Combobox(root2, textvariable=year2)
-    year_list2 = list(range(2015, 2020))
-    years2['values'] = year_list2
-    years2.current(1)
-    years2.grid(row=1, column=2, padx=5, pady=5, ipady=2, sticky=W)
+    years2['values'] = [2018]
+    years2.current(0)
+    years2.grid(row=2, column=2, padx=5, pady=5, ipady=2, sticky=W)
 
     # entry_month = Entry(root2, foreground="black", background="white", font="60")
 
@@ -661,7 +670,7 @@ def six():
 
     apply_but = Button(root2, text="APPLY", background="#148", foreground="#ccc", padx="14", pady="7", font="13",
                        command=apply)
-    apply_but.grid(column=1, row=2)
+    apply_but.grid(row=3, column=1)
     root2.mainloop()
 
 
@@ -669,47 +678,48 @@ def seven():
     root2 = Toplevel(root)
     root2.title("Date")
 
+    Label(root2, text="Day").grid(row=0, column=0)
     day = StringVar()
     day_list = list(range(1, 32))
     days = ttk.Combobox(root2, textvariable=day)
     days['values'] = day_list
-    days.current(1)
-    days.grid(row=0, column=1, padx=5, pady=5, ipady=2, sticky=W)
+    days.current(0)
+    days.grid(row=1, column=0, padx=5, pady=5, ipady=2, sticky=W)
 
+    Label(root2, text="Month").grid(row=0, column=1)
     month = StringVar()
     months = ttk.Combobox(root2, textvariable=month)
     month_list = list(range(1, 13))
     months['values'] = month_list
-    months.current(1)
-    months.grid(row=0, column=0, padx=5, pady=5, ipady=2, sticky=W)
+    months.current(0)
+    months.grid(row=1, column=1, padx=5, pady=5, ipady=2, sticky=W)
 
+    Label(root2, text="Year").grid(row=0, column=2)
     year = StringVar()
     years = ttk.Combobox(root2, textvariable=year)
-    year_list = list(range(2015, 2020))
-    years['values'] = year_list
-    years.current(1)
-    years.grid(row=0, column=2, padx=5, pady=5, ipady=2, sticky=W)
+    years['values'] = [2018]
+    years.current(0)
+    years.grid(row=1, column=2, padx=5, pady=5, ipady=2, sticky=W)
 
     day2 = StringVar()
     day_list2 = list(range(1, 32))
     days2 = ttk.Combobox(root2, textvariable=day2)
     days2['values'] = day_list2
-    days2.current(1)
-    days2.grid(row=1, column=1, padx=5, pady=5, ipady=2, sticky=W)
+    days2.current(30)
+    days2.grid(row=2, column=0, padx=5, pady=5, ipady=2, sticky=W)
 
     month2 = StringVar()
     months2 = ttk.Combobox(root2, textvariable=month2)
     month_list2 = list(range(1, 13))
     months2['values'] = month_list2
-    months2.current(1)
-    months2.grid(row=1, column=0, padx=5, pady=5, ipady=2, sticky=W)
+    months2.current(11)
+    months2.grid(row=2, column=1, padx=5, pady=5, ipady=2, sticky=W)
 
     year2 = StringVar()
     years2 = ttk.Combobox(root2, textvariable=year2)
-    year_list2 = list(range(2015, 2020))
-    years2['values'] = year_list2
-    years2.current(1)
-    years2.grid(row=1, column=2, padx=5, pady=5, ipady=2, sticky=W)
+    years2['values'] = [2018]
+    years2.current(0)
+    years2.grid(row=2, column=2, padx=5, pady=5, ipady=2, sticky=W)
 
     def get_day(*args):
         selected_day = int(day.get())
@@ -768,7 +778,7 @@ def seven():
 
     apply_but = Button(root2, text="APPLY", background="#148", foreground="#ccc", padx="14", pady="7", font="13",
                        command=apply)
-    apply_but.grid(column=1, row=2)
+    apply_but.grid(row=3, column=1)
     root2.mainloop()
 
 
@@ -776,47 +786,48 @@ def eight():
     root2 = Toplevel(root)
     root2.title("Date")
 
+    Label(root2, text="Day").grid(row=0, column=0)
     day = StringVar()
     day_list = list(range(1, 32))
     days = ttk.Combobox(root2, textvariable=day)
     days['values'] = day_list
-    days.current(1)
-    days.grid(row=0, column=1, padx=5, pady=5, ipady=2, sticky=W)
+    days.current(0)
+    days.grid(row=1, column=0, padx=5, pady=5, ipady=2, sticky=W)
 
+    Label(root2, text="Month").grid(row=0, column=1)
     month = StringVar()
     months = ttk.Combobox(root2, textvariable=month)
     month_list = list(range(1, 13))
     months['values'] = month_list
-    months.current(1)
-    months.grid(row=0, column=0, padx=5, pady=5, ipady=2, sticky=W)
+    months.current(0)
+    months.grid(row=1, column=1, padx=5, pady=5, ipady=2, sticky=W)
 
+    Label(root2, text="Year").grid(row=0, column=2)
     year = StringVar()
     years = ttk.Combobox(root2, textvariable=year)
-    year_list = list(range(2015, 2020))
-    years['values'] = year_list
-    years.current(1)
-    years.grid(row=0, column=2, padx=5, pady=5, ipady=2, sticky=W)
+    years['values'] = [2018]
+    years.current(0)
+    years.grid(row=1, column=2, padx=5, pady=5, ipady=2, sticky=W)
 
     day2 = StringVar()
     day_list2 = list(range(1, 32))
     days2 = ttk.Combobox(root2, textvariable=day2)
     days2['values'] = day_list2
-    days2.current(1)
-    days2.grid(row=1, column=1, padx=5, pady=5, ipady=2, sticky=W)
+    days2.current(30)
+    days2.grid(row=2, column=0, padx=5, pady=5, ipady=2, sticky=W)
 
     month2 = StringVar()
     months2 = ttk.Combobox(root2, textvariable=month2)
     month_list2 = list(range(1, 13))
     months2['values'] = month_list2
-    months2.current(1)
-    months2.grid(row=1, column=0, padx=5, pady=5, ipady=2, sticky=W)
+    months2.current(11)
+    months2.grid(row=2, column=1, padx=5, pady=5, ipady=2, sticky=W)
 
     year2 = StringVar()
     years2 = ttk.Combobox(root2, textvariable=year2)
-    year_list2 = list(range(2015, 2020))
-    years2['values'] = year_list2
-    years2.current(1)
-    years2.grid(row=1, column=2, padx=5, pady=5, ipady=2, sticky=W)
+    years2['values'] = [2018]
+    years2.current(0)
+    years2.grid(row=2, column=2, padx=5, pady=5, ipady=2, sticky=W)
 
     # entry_month = Entry(root2, foreground="black", background="white", font="60")
 
@@ -909,7 +920,7 @@ def eight():
 
     apply_but = Button(root2, text="APPLY", background="#148", foreground="#ccc", padx="14", pady="7", font="13",
                        command=apply)
-    apply_but.grid(column=1, row=2)
+    apply_but.grid(row=3, column=1)
     root2.mainloop()
 
 
@@ -917,47 +928,48 @@ def nine():
     root2 = Toplevel(root)
     root2.title("Date")
 
+    Label(root2, text="Day").grid(row=0, column=0)
     day = StringVar()
     day_list = list(range(1, 32))
     days = ttk.Combobox(root2, textvariable=day)
     days['values'] = day_list
-    days.current(1)
-    days.grid(row=0, column=1, padx=5, pady=5, ipady=2, sticky=W)
+    days.current(0)
+    days.grid(row=1, column=0, padx=5, pady=5, ipady=2, sticky=W)
 
+    Label(root2, text="Month").grid(row=0, column=1)
     month = StringVar()
     months = ttk.Combobox(root2, textvariable=month)
     month_list = list(range(1, 13))
     months['values'] = month_list
-    months.current(1)
-    months.grid(row=0, column=0, padx=5, pady=5, ipady=2, sticky=W)
+    months.current(0)
+    months.grid(row=1, column=1, padx=5, pady=5, ipady=2, sticky=W)
 
+    Label(root2, text="Year").grid(row=0, column=2)
     year = StringVar()
     years = ttk.Combobox(root2, textvariable=year)
-    year_list = list(range(2015, 2020))
-    years['values'] = year_list
-    years.current(1)
-    years.grid(row=0, column=2, padx=5, pady=5, ipady=2, sticky=W)
+    years['values'] = [2018]
+    years.current(0)
+    years.grid(row=1, column=2, padx=5, pady=5, ipady=2, sticky=W)
 
     day2 = StringVar()
     day_list2 = list(range(1, 32))
     days2 = ttk.Combobox(root2, textvariable=day2)
     days2['values'] = day_list2
-    days2.current(1)
-    days2.grid(row=1, column=1, padx=5, pady=5, ipady=2, sticky=W)
+    days2.current(30)
+    days2.grid(row=2, column=0, padx=5, pady=5, ipady=2, sticky=W)
 
     month2 = StringVar()
     months2 = ttk.Combobox(root2, textvariable=month2)
     month_list2 = list(range(1, 13))
     months2['values'] = month_list2
-    months2.current(1)
-    months2.grid(row=1, column=0, padx=5, pady=5, ipady=2, sticky=W)
+    months2.current(11)
+    months2.grid(row=2, column=1, padx=5, pady=5, ipady=2, sticky=W)
 
     year2 = StringVar()
     years2 = ttk.Combobox(root2, textvariable=year2)
-    year_list2 = list(range(2015, 2020))
-    years2['values'] = year_list2
-    years2.current(1)
-    years2.grid(row=1, column=2, padx=5, pady=5, ipady=2, sticky=W)
+    years2['values'] = [2018]
+    years2.current(0)
+    years2.grid(row=2, column=2, padx=5, pady=5, ipady=2, sticky=W)
 
     # entry_month = Entry(root2, foreground="black", background="white", font="60")
 
@@ -1027,7 +1039,7 @@ def nine():
 
     apply_but = Button(root2, text="APPLY", background="#148", foreground="#ccc", padx="14", pady="7", font="13",
                        command=apply)
-    apply_but.grid(column=1, row=2)
+    apply_but.grid(row=3, column=1)
     root2.mainloop()
 
 
@@ -1035,26 +1047,28 @@ def ten():
     root2 = Toplevel(root)
     root2.title("Date")
 
+    Label(root2, text="Day").grid(row=0, column=0)
     day = StringVar()
     day_list = list(range(1, 32))
     days = ttk.Combobox(root2, textvariable=day)
     days['values'] = day_list
-    days.current(1)
-    days.grid(row=0, column=1, padx=5, pady=5, ipady=2, sticky=W)
+    days.current(0)
+    days.grid(row=1, column=0, padx=5, pady=5, ipady=2, sticky=W)
 
+    Label(root2, text="Month").grid(row=0, column=1)
     month = StringVar()
     months = ttk.Combobox(root2, textvariable=month)
     month_list = list(range(1, 13))
     months['values'] = month_list
-    months.current(1)
-    months.grid(row=0, column=0, padx=5, pady=5, ipady=2, sticky=W)
+    months.current(0)
+    months.grid(row=1, column=1, padx=5, pady=5, ipady=2, sticky=W)
 
+    Label(root2, text="Year").grid(row=0, column=2)
     year = StringVar()
     years = ttk.Combobox(root2, textvariable=year)
-    year_list = list(range(2015, 2020))
-    years['values'] = year_list
-    years.current(1)
-    years.grid(row=0, column=2, padx=5, pady=5, ipady=2, sticky=W)
+    years['values'] = [2018]
+    years.current(0)
+    years.grid(row=1, column=2, padx=5, pady=5, ipady=2, sticky=W)
 
     def get_day(*args):
         selected_day = int(day.get())
@@ -1087,7 +1101,7 @@ def ten():
 
     apply_but = Button(root2, text="APPLY", background="#148", foreground="#ccc", padx="14", pady="7", font="13",
                        command=apply)
-    apply_but.grid(column=1, row=2)
+    apply_but.grid(row=3, column=1)
     root2.mainloop()
 
 
