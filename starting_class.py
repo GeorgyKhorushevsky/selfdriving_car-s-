@@ -135,13 +135,10 @@ def init():
         elif selected_value == '10':
             ten()
 
-    var.trace('w', change_dropdown)
     right_panel.add(bottom_frame)
-    Label(master, text='tables\' names').pack(side=LEFT, fill=BOTH)
-    Label(master, text='tables\' content').pack(fill=BOTH)
-    Button(master, text='quit', command=master.quit).pack(side=RIGHT, fill=BOTH)
-    Button(master, text='Assignment 3', background="#148", foreground="#ccc", command=change_dropdown).pack(side=RIGHT,
-                                                                                                            fill=BOTH, )
+    Button(bottom_frame, text='Test', height=5, width=15, background="#148", foreground="#ccc",
+           command=change_dropdown).pack(side=RIGHT,
+                                         fill=BOTH, )
 
     panels.add(left_panel)
     panels.add(right_panel, stretch="always")
@@ -192,10 +189,6 @@ def one():
 
     def get_color():
         return sample_color.get()
-
-    sample_user.trace('w', get_username)
-    sample_letters.trace('w', get_letters)
-    sample_color.trace('w', get_color)
 
     def case_1(username, color, first_letter):
         query = "SELECT car.* FROM car JOIN ride_order ON car.CID = ride_order.CID " \
@@ -267,10 +260,6 @@ def two():
     def get_year(*args):
         selected_year = int(year.get())
         return selected_year
-
-    day.trace('w', get_day)
-    month.trace('w', get_month)
-    year.trace('w', get_year)
 
     def case_2(year, month, day):
         root3 = Tk()
@@ -380,13 +369,6 @@ def three():
     def get_year2(*args):
         selected_year = int(year2.get())
         return selected_year
-
-    day.trace('w', get_day)
-    month.trace('w', get_month)
-    year.trace('w', get_year)
-    day2.trace('w', get_day2)
-    month2.trace('w', get_month2)
-    year2.trace('w', get_year2)
 
     def case_3(year, month, day, year2, month2, day2):
         # for morning (7 AM - 10 AM)
@@ -502,10 +484,6 @@ def five():
         selected_year = int(year.get())
         return selected_year
 
-    day.trace('w', get_day)
-    month.trace('w', get_month)
-    year.trace('w', get_year)
-
     def case_5(year, month, day):
         form_date = datetime(year, month, day).date()
         query = "SELECT AVG(start_pick_up_dest), AVG(CAST((julianday(end_time) -  julianday(start_time)) * 24 * 60 AS INTEGER)) FROM ride_order WHERE date(start_time) = '{0}'".format(
@@ -609,13 +587,6 @@ def six():
     def get_year2(*args):
         selected_year = int(year2.get())
         return selected_year
-
-    day.trace('w', get_day)
-    month.trace('w', get_month)
-    year.trace('w', get_year)
-    day2.trace('w', get_day2)
-    month2.trace('w', get_month2)
-    year2.trace('w', get_year2)
 
     def case_6(year, month, day):
         # for morning (7 AM - 10 AM)
@@ -764,18 +735,11 @@ def seven():
         selected_year = int(year2.get())
         return selected_year
 
-    day.trace('w', get_day)
-    month.trace('w', get_month)
-    year.trace('w', get_year)
-    day2.trace('w', get_day2)
-    month2.trace('w', get_month2)
-    year2.trace('w', get_year2)
-
-
     def case_7(year, month, day, year2, month2, day2):
         date1 = datetime(year, month, day).date()
         date2 = datetime(year2, month2, day2).date()
-        query = "SELECT CID, COUNT(CID) AS count FROM ride_order WHERE date(start_time) >= '{0}' AND date(start_time) <= '{1}' GROUP BY CID ORDER BY count ASC LIMIT CAST(0.1*(SELECT COUNT(*) FROM car) AS INTEGER)".format(date1, date2)
+        query = "SELECT CID, COUNT(CID) AS count FROM ride_order WHERE date(start_time) >= '{0}' AND date(start_time) <= '{1}' GROUP BY CID ORDER BY count ASC LIMIT CAST(0.1*(SELECT COUNT(*) FROM car) AS INTEGER)".format(
+            date1, date2)
         result = db.get_result(query)
         root2 = Toplevel()
         root2.title("Case #7")
@@ -793,7 +757,6 @@ def seven():
                 listbox.insert(END, row)
         root2.mainloop()
 
-
     def apply():
         sel_day = get_day()
         sel_month = get_month()
@@ -807,7 +770,6 @@ def seven():
                        command=apply)
     apply_but.grid(column=1, row=2)
     root2.mainloop()
-
 
 
 def eight():
@@ -882,13 +844,6 @@ def eight():
         selected_year = int(year2.get())
         return selected_year
 
-    day.trace('w', get_day)
-    month.trace('w', get_month)
-    year.trace('w', get_year)
-    day2.trace('w', get_day2)
-    month2.trace('w', get_month2)
-    year2.trace('w', get_year2)
-
     def case_8(year, month, day, year2, month2, day2):
         form_date = datetime(year, month, day).date()
         form2_date = datetime(year2, month2, day2).date()
@@ -909,7 +864,8 @@ def eight():
         for id in users_id:
             query = "SELECT {0}, COUNT(*) FROM charging_order AS co, ride_order AS ro WHERE " \
                     "co.car_id = ro.CID AND date(ro.start_time) >= '{1}' AND date(ro.start_time) <= '{2}'" \
-                    "AND ro.PID = {3} AND date(co.start_time) = date(ro.start_time)".format(id, form_date, form2_date, id)
+                    "AND ro.PID = {3} AND date(co.start_time) = date(ro.start_time)".format(id, form_date, form2_date,
+                                                                                            id)
             result = db.get_result(query)
             listbox.insert(END, result)
             print(result)
@@ -1029,13 +985,6 @@ def nine():
         selected_year = int(year2.get())
         return selected_year
 
-    day.trace('w', get_day)
-    month.trace('w', get_month)
-    year.trace('w', get_year)
-    day2.trace('w', get_day2)
-    month2.trace('w', get_month2)
-    year2.trace('w', get_year2)
-
     def case_9(year, month, day, year2, month2, day2):
         date_from = datetime(year, month, day)
         date_until = datetime(year2, month2, day2)
@@ -1118,10 +1067,6 @@ def ten():
     def get_year(*args):
         selected_year = int(year.get())
         return selected_year
-
-    day.trace('w', get_day)
-    month.trace('w', get_month)
-    year.trace('w', get_year)
 
     def case_10(year, month, day):
         date = datetime(year, month, day).date()
