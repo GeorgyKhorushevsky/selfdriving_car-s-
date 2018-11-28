@@ -31,12 +31,16 @@ month = [str(i) for i in range(1, 13)]
 year = [str(i) for i in range(1999, 2019)]
 
 
-def centralize(width=xm):
+def centralize(width=xm, on_screen_center=True):
     root.update_idletasks()
     height = root.winfo_height()
     x = (root.winfo_screenwidth() // 2) - (width // 2)
     y = (root.winfo_screenheight() // 2) - (height // 2)
-    root.geometry('{}x{}+{}+{}'.format(width, height, x, y))
+    if on_screen_center:
+        root.geometry('{}x{}+{}+{}'.format(width, height, x, y))
+    else:
+        root.geometry('{}x{}'.format(width, height))
+
 
 
 def on_select(event, panel):
@@ -48,13 +52,13 @@ def on_select(event, panel):
         index = int(w.curselection()[0])
         value = w.get(index)
         if value == "ride_order":
-            centralize(width=xm + 380)
+            centralize(width=xm + 380, on_screen_center=False)
         elif value == "car":
-            centralize(width=xm + 215)
+            centralize(width=xm + 215, on_screen_center=False)
         elif value == "customer":
-            centralize(width=xm + 215)
+            centralize(width=xm + 215, on_screen_center=False)
         else:
-            centralize()
+            centralize(on_screen_center=False)
         column_names = db.get_table_columns(value)
         column_labels = []
         i = 0
@@ -1172,7 +1176,7 @@ label_password.place(x=200, y=290)
 entry_password.place(x=300, y=290)
 login_but = Button(text="Log in", background="#148", foreground="#ccc", padx="14", pady="7", font="13", command=login)
 login_but.place(x=250, y=350)
-centralize(xm)
+centralize()
 
 # temporary
 entry_login.insert(END, "admin")
