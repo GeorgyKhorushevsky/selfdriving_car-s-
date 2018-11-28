@@ -609,41 +609,41 @@ def five():
 
 def six():
     # # for morning (7 AM - 10 AM)
-    # morning_start = datetime(year, month, day, 7, 00).hour
-    # morning_end = datetime(year, month, day, 10, 00).hour
+    morning_start = datetime(2018, 5, 8, 7, 00).strftime('%H')
+    morning_end = datetime(2018, 5, 8, 10, 00).strftime('%H')
     # # for afternoon (12 AM - 2 PM)
-    # afternoon_start = datetime(year, month, day, 12, 00).strftime('%H')
-    # afternoon_end = datetime(year, month, day, 14, 00).strftime('%H')
+    afternoon_start = datetime(2018, 5, 8, 12, 00).strftime('%H')
+    afternoon_end = datetime(2018, 5, 8, 14, 00).strftime('%H')
     # # for evening (5 PM - 7 PM)
-    # evening_start = datetime(year, month, day, 17, 00).strftime('%H')
-    # evening_end = datetime(year, month, day, 19, 00).strftime('%H')
+    evening_start = datetime(2018, 5, 8, 17, 00).strftime('%H')
+    evening_end = datetime(2018, 5, 8, 19, 00).strftime('%H')
 
     morning_pickup = "SELECT pick_up_location, COUNT(pick_up_location) AS count " \
-                     "FROM ride_order WHERE strftime('%H', start_time) >= 7 " \
-                     "AND strftime('%H', start_time) < 10 GROUP BY pick_up_location " \
-                     "ORDER BY count DESC LIMIT 3"
+                     "FROM ride_order WHERE strftime('%H', start_time) >= '{0}' " \
+                     "AND strftime('%H', start_time) < '{1}' GROUP BY pick_up_location " \
+                     "ORDER BY count DESC LIMIT 3".format(morning_start, morning_end)
     morning_dest = "SELECT end_location, COUNT(end_location) AS count " \
-                   "FROM ride_order WHERE strftime('%H', start_time) >= 7 " \
-                   "AND strftime('%H', start_time) < 10 GROUP BY end_location " \
-                   "ORDER BY count DESC LIMIT 3"
+                   "FROM ride_order WHERE strftime('%H', start_time) >= '{0}' " \
+                   "AND strftime('%H', start_time) < '{1}' GROUP BY end_location " \
+                   "ORDER BY count DESC LIMIT 3".format(morning_start, morning_end)
 
     afternoon_pickup = "SELECT pick_up_location, COUNT(pick_up_location) AS count " \
-                       "FROM ride_order WHERE strftime('%H', start_time) >= 12 " \
-                       "AND strftime('%H', start_time) < 14 GROUP BY pick_up_location " \
-                       "ORDER BY count DESC LIMIT 3"
+                       "FROM ride_order WHERE strftime('%H', start_time) >= '{0}' " \
+                       "AND strftime('%H', start_time) < '{1}' GROUP BY pick_up_location " \
+                       "ORDER BY count DESC LIMIT 3".format(afternoon_start, afternoon_end)
     afternoon_dest = "SELECT pick_up_location, COUNT(pick_up_location) AS count " \
-                     "FROM ride_order WHERE strftime('%H', start_time) >= 12 " \
-                     "AND strftime('%H', start_time) < 14 GROUP BY pick_up_location " \
-                     "ORDER BY count DESC LIMIT 3"
+                     "FROM ride_order WHERE strftime('%H', start_time) >= '{0}' " \
+                     "AND strftime('%H', start_time) < '{1}' GROUP BY pick_up_location " \
+                     "ORDER BY count DESC LIMIT 3".format(afternoon_start, afternoon_end)
 
     evening_pickup = "SELECT pick_up_location, COUNT(pick_up_location) AS count " \
-                     "FROM ride_order WHERE strftime('%H', start_time) >= 17 " \
-                     "AND strftime('%H', start_time) < 19 GROUP BY pick_up_location " \
-                     "ORDER BY count DESC LIMIT 3"
+                     "FROM ride_order WHERE strftime('%H', start_time) >= '{0}' " \
+                     "AND strftime('%H', start_time) < '{1}' GROUP BY pick_up_location " \
+                     "ORDER BY count DESC LIMIT 3".format(evening_start, evening_end)
     evening_dest = "SELECT pick_up_location, COUNT(pick_up_location) AS count " \
-                   "FROM ride_order WHERE strftime('%H', start_time) >= 17 " \
-                   "AND strftime('%H', start_time) < 19 GROUP BY pick_up_location " \
-                   "ORDER BY count DESC LIMIT 3"
+                   "FROM ride_order WHERE strftime('%H', start_time) >= '{0}' " \
+                   "AND strftime('%H', start_time) < '{1}' GROUP BY pick_up_location " \
+                   "ORDER BY count DESC LIMIT 3".format(evening_start, evening_end)
 
     """ 
     от db.get_result(любой_pickup),а точнее от ответа на запрос ожидается лист:
@@ -659,7 +659,7 @@ def six():
     result = [([db.get_result(morning_pickup), db.get_result(morning_dest)]),
               ([db.get_result(afternoon_pickup), db.get_result(afternoon_dest)]),
               ([db.get_result(evening_pickup), db.get_result(evening_dest)])]
-
+    print(result)
     root2 = Toplevel(root)
     root2.title("Case #6")
     background = Canvas(root2, width=xm, height=ym)
