@@ -31,9 +31,8 @@ month = [str(i) for i in range(1, 13)]
 year = [str(i) for i in range(1999, 2019)]
 
 
-def centralize():
+def centralize(width=xm):
     root.update_idletasks()
-    width = root.winfo_width()
     height = root.winfo_height()
     x = (root.winfo_screenwidth() // 2) - (width // 2)
     y = (root.winfo_screenheight() // 2) - (height // 2)
@@ -48,11 +47,19 @@ def on_select(event, panel):
             wid.destroy()
         index = int(w.curselection()[0])
         value = w.get(index)
+        if value == "ride_order":
+            centralize(width=xm + 380)
+        elif value == "car":
+            centralize(width=xm + 215)
+        elif value == "customer":
+            centralize(width=xm + 215)
+        else:
+            centralize()
         column_names = db.get_table_columns(value)
         column_labels = []
         i = 0
         for name in column_names:
-            label = Label(panel, text=name, width=12, wraplength=55)
+            label = Label(panel, text=name, width=14, wraplength=100)
             label.grid(row=0, column=i)
             column_labels.append(label)
             i += 1
@@ -233,11 +240,12 @@ def one():
                 "JOIN customer ON customer.username = '{0}' " \
                 "WHERE car.color = '{1}' AND car.license_plate LIKE '{2}%' " \
                 "AND strftime('%d', ride_order.start_time) = '{3}'".format(username, color, first_letter, form_date)
-        result = db.get_result(query)
-        root2 = Tk()
+        result = list(set(db.get_result(query)))
+        root2 = Toplevel()
         root2.title("Case #1")
         scrollbar = Scrollbar(root2, orient=VERTICAL)
         scrollbar.pack(fill=Y, side=RIGHT)
+
         listbox = Listbox(root2)
         listbox.pack(fill=BOTH, expand=1)
 
@@ -1164,7 +1172,7 @@ label_password.place(x=200, y=290)
 entry_password.place(x=300, y=290)
 login_but = Button(text="Log in", background="#148", foreground="#ccc", padx="14", pady="7", font="13", command=login)
 login_but.place(x=250, y=350)
-centralize()
+centralize(xm)
 
 # temporary
 entry_login.insert(END, "admin")
