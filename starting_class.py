@@ -1021,8 +1021,8 @@ def ten():
     Label(root2, text="Year").grid(row=0, column=2)
     year = StringVar()
     years = ttk.Combobox(root2, textvariable=year)
-    years['values'] = [2018]
-    years.current(0)
+    years['values'] = [2018, 2019]
+    years.current(1)
     years.grid(row=1, column=2, padx=5, pady=5, ipady=2, sticky=W)
 
     def get_day(*args):
