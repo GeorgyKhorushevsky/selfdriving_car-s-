@@ -652,7 +652,7 @@ def six():
              (location, count)
                                 ]
                                 
-    Вывод готов, но полной гарантии нету. Советую попробовать запустить, при любой неудаче дебажить и звать @lenargum.
+    Вывод для данного паттерна выходных данных должен работать корректно.
     
     """
     # TODO
@@ -1055,7 +1055,7 @@ def ten():
         query1 = "SELECT car_id, MAX(charging_cost) " \
                  "FROM (SELECT car_id, SUM(charging_order.price) AS charging_cost FROM charging_order " \
                  "WHERE date(charging_order.start_time) < '{0}' GROUP BY charging_order.car_id)".format(date)
-
+        # TODO
         query2 = "SELECT CID, MAX(repair_cost) " \
                  "FROM (SELECT CID, SUM(car_repair_history.overall_price) AS repair_cost FROM car_repair_history " \
                  "WHERE date(car_repair_history.date_time) < '{0}' GROUP BY car_repair_history.CID)".format(date)
@@ -1088,7 +1088,7 @@ def login():
         i = 1
     else:
         keker = func.user(a, b)
-    if (keker):
+    if keker:
         root.title("Cases:")
         clean(1)
         canv.destroy()
@@ -1096,8 +1096,6 @@ def login():
             Button(text="3." + (str(i) if i == 10 else ("0" + str(i))), background="#148", foreground="#ccc", padx="14",
                    pady="7", font="13", command=funct[i - 1]) for i in range(1, 11)]
         init()
-
-
     else:
         mb.showerror("Mistake", "login or password is incorrect")
         mb.showinfo("for TA:", "if you are our TA, your login is \"admin\". Password is also \"admin\"")
