@@ -631,18 +631,18 @@ def six():
                        "FROM ride_order WHERE strftime('%H', start_time) >= '{0}' " \
                        "AND strftime('%H', start_time) < '{1}' GROUP BY pick_up_location " \
                        "ORDER BY count DESC LIMIT 3".format(afternoon_start, afternoon_end)
-    afternoon_dest = "SELECT pick_up_location, COUNT(pick_up_location) AS count " \
+    afternoon_dest = "SELECT end_location, COUNT(end_location) AS count " \
                      "FROM ride_order WHERE strftime('%H', start_time) >= '{0}' " \
-                     "AND strftime('%H', start_time) < '{1}' GROUP BY pick_up_location " \
+                     "AND strftime('%H', start_time) < '{1}' GROUP BY end_location " \
                      "ORDER BY count DESC LIMIT 3".format(afternoon_start, afternoon_end)
 
     evening_pickup = "SELECT pick_up_location, COUNT(pick_up_location) AS count " \
                      "FROM ride_order WHERE strftime('%H', start_time) >= '{0}' " \
                      "AND strftime('%H', start_time) < '{1}' GROUP BY pick_up_location " \
                      "ORDER BY count DESC LIMIT 3".format(evening_start, evening_end)
-    evening_dest = "SELECT pick_up_location, COUNT(pick_up_location) AS count " \
+    evening_dest = "SELECT end_location, COUNT(end_location) AS count " \
                    "FROM ride_order WHERE strftime('%H', start_time) >= '{0}' " \
-                   "AND strftime('%H', start_time) < '{1}' GROUP BY pick_up_location " \
+                   "AND strftime('%H', start_time) < '{1}' GROUP BY end_location " \
                    "ORDER BY count DESC LIMIT 3".format(evening_start, evening_end)
 
     """ 
@@ -659,7 +659,12 @@ def six():
     result = [([db.get_result(morning_pickup), db.get_result(morning_dest)]),
               ([db.get_result(afternoon_pickup), db.get_result(afternoon_dest)]),
               ([db.get_result(evening_pickup), db.get_result(evening_dest)])]
-    print(result)
+    print(db.get_result(morning_pickup))
+    print(db.get_result(morning_dest))
+    print(db.get_result(afternoon_pickup))
+    print(db.get_result(afternoon_dest))
+    print(db.get_result(evening_pickup))
+    print(db.get_result(evening_dest))
     root2 = Toplevel(root)
     root2.title("Case #6")
     background = Canvas(root2, width=xm, height=ym)
