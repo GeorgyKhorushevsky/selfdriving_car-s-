@@ -2,8 +2,6 @@ import random
 import string
 from datetime import datetime, timedelta
 
-from db_handler import *
-
 
 def combine(*args):
     l = list(args)
@@ -57,12 +55,13 @@ def sampling(db):
         r_price = prices[i]
         db.insert('car', 'TYPE_ID,license_plate,color,baby_seat,charge_level,availability,check_success,price_per_km',
                   combine(r_type_id, license_plate, r_color, r_baby, r_charge, r_avail, r_check, r_price))
-    # for case 1
+
+    # addition for case 1
     for i in range(10, 13):
         db.insert('car', 'TYPE_ID,license_plate,color,baby_seat,charge_level,availability,check_success,price_per_km',
                   combine(
                       random.choice(type_id),
-                      'AN'+''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(5)),
+                      'AN' + ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(5)),
                       'red', random.choice(baby_seat), random.choice(charge_level),
                       random.choice(availability), random.choice(check_success), prices[i]
                   ))
@@ -89,7 +88,8 @@ def sampling(db):
         r_cid = random.choice(car_id)
         r_csid = random.choice(charging_station_id)
         date1, date2 = two_random_dates()
-        db.insert('charging_order', 'start_time,end_time,car_id,cs_id,price', combine(date1, date2, r_cid, r_csid, round(random.uniform(10.0, 50.0), 2)))
+        db.insert('charging_order', 'start_time,end_time,car_id,cs_id,price',
+                  combine(date1, date2, r_cid, r_csid, round(random.uniform(10.0, 50.0), 2)))
 
     # provider
     name = ["Company 1", "Company 2", "Company 3", "Company 4"]
@@ -140,7 +140,8 @@ def sampling(db):
         r_date, r2_date = two_random_dates()
         r_wid = random.randint(1, 4)
         r_cid = random.randint(1, 4)
-        db.insert('car_repair_history', 'date_time,overall_price,WID,CID', combine(r_date, round(random.uniform(50.00, 500.00)), r_wid, r_cid))
+        db.insert('car_repair_history', 'date_time,overall_price,WID,CID',
+                  combine(r_date, round(random.uniform(50.00, 500.00)), r_wid, r_cid))
 
     # repaired_car_parts
     for i in range(0, 10):
@@ -154,9 +155,9 @@ def sampling(db):
     # customer table
     first_names = ["Homer", "Krosh", "Peter", "Jay", "Katy", "Lindsey"]
     last_names = ["Jefferson", "Cox", "Parker"]
-    usernames = ["dalana", "kriff89", "john_doe", "terrra", "terrra1", "bunny", "twisted", "pixar"]
+    usernames = ["dalana", "kriff89", "jojo228", "terrra", "terrra1", "bunny", "twisted", "pixar", "john_doe"]
     endings = ["@mail.ru", "@gmail.com", "@yandex.ru"]
-    emails = [usernames[i] + random.choice(endings) for i in range(0, 8)]
+    emails = [usernames[i] + random.choice(endings) for i in range(0, 9)]
     hashes, salts = simplest_password_hash()
     for i in range(0, 8):
         r_first = random.choice(first_names)
@@ -168,6 +169,11 @@ def sampling(db):
         r_salt = salts[i]
         db.insert('customer', 'first_name,last_name,username,phone_number,email,password_hash,password_salt',
                   combine(r_first, r_last, r_username, r_phone, r_email, r_hash, r_salt))
+
+    # addition for case 1
+    db.insert('customer', 'first_name,last_name,username,phone_number,email,password_hash,password_salt',
+              combine(random.choice(first_names), random.choice(last_names), usernames[8], random_phone(), emails[8],
+                      hashes[8], salts[8]))
 
     # customer_location table
     for i in range(0, 8):
@@ -195,8 +201,21 @@ def sampling(db):
         r_price = round(prices[cids[i] - 1] * r_total_distance, 2)
         db.insert('ride_order', 'overall_price,start_location,pick_up_location,start_pick_up_dest,end_location,'
                                 'start_time,end_time,total_distance,PID,CID', combine(
-            r_price, r_start, r_pick, r_dest, r_end, r_start_time, r_end_time, r_total_distance, pids[i], cids[i]
-        ))
+            r_price, r_start, r_pick, r_dest, r_end, r_start_time, r_end_time, r_total_distance, pids[i], cids[i]))
+    r_start_time, r_end_time = two_random_dates()
+
+    # addition for case 1
+    db.insert('ride_order', 'overall_price,start_location,pick_up_location,start_pick_up_dest,end_location,'
+                            'start_time,end_time,total_distance,PID,CID',
+              combine(round(prices[11] * round(random.uniform(1.5, 15.0), 3), 2), random.choice(start_location),
+                      random.choice(pick_up_location), round(random.uniform(0.2, 4.5), 3), random.choice(end_location),
+                      r_start_time, r_end_time, round(random.uniform(1.5, 15.0), 3), 9, 11))
+    db.insert('ride_order', 'overall_price,start_location,pick_up_location,start_pick_up_dest,end_location,'
+                            'start_time,end_time,total_distance,PID,CID',
+              combine(round(prices[11] * round(random.uniform(1.5, 15.0), 3), 2), random.choice(start_location),
+                      random.choice(pick_up_location), round(random.uniform(0.2, 4.5), 3), random.choice(end_location),
+                      r_start_time + timedelta(hours=1),
+                      r_end_time + timedelta(hours=1), round(random.uniform(1.5, 15.0), 3), 9, 11))
 
     # payment table
     order_id = list(range(1, 21))
@@ -208,12 +227,10 @@ def sampling(db):
     db.insert('payment', 'date_time,PID,order_id', combine(date1, 3, order_id[2]))
 
 
-
-
 def simplest_password_hash():
     password_hashes = []
     salts = []
-    for i in range(0, 8):
+    for i in range(0, 9):
         password = ''.join(random.choice(string.ascii_letters) for _ in range(8))
         salt = ''.join(random.choice(string.ascii_letters) for _ in range(5))
         salts.append(salt)

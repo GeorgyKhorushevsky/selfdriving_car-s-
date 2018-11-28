@@ -111,7 +111,6 @@ def init():
     Label(bottom_frame, text="Task Number").grid(row=1, column=1)
     combo.grid(row=2, column=1)
 
-    # if selected value changed
     def change_dropdown(*args):
         selected_value = var.get()
         if selected_value == '1':
@@ -184,6 +183,41 @@ def one():
     color.grid(row=1, column=2, padx=5, pady=2, sticky=W)
     sample_color.set("red")
 
+    Label(root1, text="Day").grid(row=2, column=0)
+    day = StringVar()
+    day_list = list(range(1, 32))
+    days = ttk.Combobox(root1, textvariable=day)
+    days['values'] = day_list
+    days.current(0)
+    days.grid(row=3, column=0, padx=5, pady=5, ipady=2, sticky=W)
+
+    Label(root1, text="Month").grid(row=2, column=1)
+    month = StringVar()
+    months = ttk.Combobox(root1, textvariable=month)
+    month_list = list(range(1, 13))
+    months['values'] = month_list
+    months.current(0)
+    months.grid(row=3, column=1, padx=5, pady=5, ipady=2, sticky=W)
+
+    Label(root1, text="Year").grid(row=2, column=2)
+    year = StringVar()
+    years = ttk.Combobox(root1, textvariable=year)
+    years['values'] = [2018]
+    years.current(0)
+    years.grid(row=3, column=2, padx=5, pady=5, ipady=2, sticky=W)
+
+    def get_day(*args):
+        selected_day = int(day.get())
+        return selected_day
+
+    def get_month(*args):
+        selected_month = int(month.get())
+        return selected_month
+
+    def get_year(*args):
+        selected_year = int(year.get())
+        return selected_year
+
     def get_username():
         return sample_user.get()
 
@@ -193,10 +227,12 @@ def one():
     def get_color():
         return sample_color.get()
 
-    def case_1(username, color, first_letter):
+    def case_1(username, color, first_letter, day, month, year):
+        form_date = datetime(year, month, day).day
         query = "SELECT car.* FROM car JOIN ride_order ON car.CID = ride_order.CID " \
                 "JOIN customer ON customer.username = '{0}' " \
-                "WHERE car.color = '{1}' AND car.license_plate LIKE '{2}%'".format(username, color, first_letter)
+                "WHERE car.color = '{1}' AND car.license_plate LIKE '{2}%' " \
+                "AND strftime('%d', ride_order.start_time) = '{3}'".format(username, color, first_letter, form_date)
         result = db.get_result(query)
         root2 = Tk()
         root2.title("Case #1")
@@ -218,11 +254,11 @@ def one():
         user = get_username()
         letters = get_letters()
         color = get_color()
-        case_1(user, color, letters)
+        case_1(user, color, letters, get_day(), get_month(), get_year())
 
     apply_but = Button(root1, text="APPLY", background="#148", foreground="#ccc", padx="14", pady="7", font="13",
                        command=apply)
-    apply_but.grid(column=0, row=2)
+    apply_but.grid(column=0, row=4)
 
     root1.after(500, root1.mainloop())
 
@@ -349,8 +385,6 @@ def three():
     years2['values'] = [2018]
     years2.current(0)
     years2.grid(row=2, column=2, padx=5, pady=5, ipady=2, sticky=W)
-
-    # entry_month = Entry(root2, foreground="black", background="white", font="60")
 
     def get_day(*args):
         selected_day = int(day.get())
@@ -570,8 +604,6 @@ def six():
     years2['values'] = [2018]
     years2.current(0)
     years2.grid(row=2, column=2, padx=5, pady=5, ipady=2, sticky=W)
-
-    # entry_month = Entry(root2, foreground="black", background="white", font="60")
 
     def get_day(*args):
         selected_day = int(day.get())
@@ -829,8 +861,6 @@ def eight():
     years2.current(0)
     years2.grid(row=2, column=2, padx=5, pady=5, ipady=2, sticky=W)
 
-    # entry_month = Entry(root2, foreground="black", background="white", font="60")
-
     def get_day(*args):
         selected_day = int(day.get())
         return selected_day
@@ -971,8 +1001,6 @@ def nine():
     years2.current(0)
     years2.grid(row=2, column=2, padx=5, pady=5, ipady=2, sticky=W)
 
-    # entry_month = Entry(root2, foreground="black", background="white", font="60")
-
     def get_day(*args):
         selected_day = int(day.get())
         return selected_day
@@ -1005,7 +1033,6 @@ def nine():
         workshop_id = []
         for id in temp:
             workshop_id.append(id[0])
-        # dictin = {}
         for id in workshop_id:
             query = "SELECT part_name, SUM(rcp.amount), crh.WID AS total_amount FROM repaired_car_parts " \
                     "AS rcp JOIN car_repair_history AS crh ON rcp.repair_ticket_id = crh.repair_ticket_id " \
@@ -1124,8 +1151,6 @@ def login():
                    pady="7", font="13", command=funct[i - 1]) for i in range(1, 11)]
         init()
 
-        # for i in range(len(buttons)):
-        #     buttons[i].grid(column=i % 5, row=0 if i < 5 else 1)
 
     else:
         mb.showerror("Mistake", "login or password is incorrect")
